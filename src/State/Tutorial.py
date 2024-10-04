@@ -1,6 +1,6 @@
 import State, Inicio
 
-class Jugar(State):
+class Tutorial(State):
     def go_to(self) -> None:
         self.context.transition_to(Inicio)
 

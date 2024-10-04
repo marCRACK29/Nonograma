@@ -11,9 +11,9 @@ class State(ABC):
         self._context = context
 
     @abstractmethod
-    def handle1(self) -> None:
+    def go_to(self) -> None:
         pass
 
     @abstractmethod
-    def handle2(self) -> None:
+    def back_to(self) -> None:
         pass
