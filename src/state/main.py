@@ -2,6 +2,7 @@ import pygame
 from state import State
 from context import Context
 from tutorial import Tutorial  # Asegúrate de que este archivo contiene la clase Tutorial
+from inicio import Inicio  # Asegúrate de que este archivo contiene la clase Inicio
 
 def main():
     # Inicializa Pygame
@@ -11,7 +12,7 @@ def main():
     pygame.display.set_caption("Nonograma")
 
     # Crea una instancia del estado inicial
-    initial_state = Tutorial()
+    initial_state = Inicio()
 
     # Crea el contexto con el estado inicial
     context = Context(initial_state)

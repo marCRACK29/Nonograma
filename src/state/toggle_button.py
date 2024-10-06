@@ -17,7 +17,7 @@ class ToggleButton:
         #verificar si el mouse está sobre el botón
         if self.rect.collidepoint(pos):
             #verificar si se hizo click en el botón izquierdo
-            if presionado == 1 and accion == False:
+            if presionado == 1 and self.clicked == False:
                 self.clicked = True
                 accion = True
             elif presionado == 0:

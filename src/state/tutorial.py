@@ -18,10 +18,11 @@ class Tutorial(State):
 
     def go_to(self) -> None:
         from inicio import Inicio
-        self.context.transition_to(Inicio)
+        self.context.transition_to(Inicio())
 
     def back_to(self) -> None:
-        pass
+        from inicio import Inicio
+        self.context.transition_to(Inicio())
 
     def handle_events(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -31,6 +32,5 @@ class Tutorial(State):
     def draw(self, screen):
         # Dibujar la ventana gráfica
         screen.fill(self.background_color)
-
         # Dibujar botón
         self.button.draw(screen)
