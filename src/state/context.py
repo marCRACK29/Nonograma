@@ -1,13 +1,13 @@
-import State
+#from state import State
 
 class Context:
     _state = None
     
-    def __init__(self, state: State) -> None:
+    def __init__(self, state: 'State') -> None:
         self.state = None
         self.transition_to(state)
         
-    def transition_to(self, state: State):
+    def transition_to(self, state: 'State'):
         self._state = state
         self.state.context = self
 
