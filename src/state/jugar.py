@@ -1,36 +1,30 @@
 import pygame
-import os
 from state import State
 from toggle_button import ToggleButton
-
 
 class Jugar(State):
     def __init__(self):
         self.background_color = (202, 228, 241)
-        self.img_uno = self.load_image('der.png')
-        self.buttonuno = ToggleButton(100, 100, self.img_uno, 0.8)
 
-    def load_image(self, filename) -> pygame.Surface:
-        current_dir = os.path.dirname(os.path.abspath(__file__))# Obtener la ruta del directorio actual del script
-        project_root = os.path.dirname(os.path.dirname(current_dir))
-        image_path_uno = os.path.join(project_root, 'resources', filename)
-        return pygame.image.load(image_path_uno).convert_alpha()
+        self.texto = pygame.font.SysFont('Arial', 30) # Texto para saber en que estado estamos.
+        self.frase = self.texto.render('Estas en jugar', True, (0, 0, 0))
+
+        self.img_uno = self.load_image('der.png')
+        self.button_uno = ToggleButton(100, 100, self.img_uno, 0.8)
 
     def go_to(self) -> None:
         from inicio import Inicio
         self.context.transition_to(Inicio())
 
     def back_to(self) -> None:
-        from inicio import Inicio
-        self.context.transition_to(Inicio())
+        pass
 
-    def handle_events(self, event):
+    def handle_events(self, event) -> None:
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.buttonuno.click():
+            if self.button_uno.click():
                 self.go_to()
 
-    def draw(self, screen):
-        # Dibujar la ventana gráfica
-        screen.fill(self.background_color)
-        # Dibujar botón
-        self.buttonuno.draw(screen)
+    def draw(self, screen) -> None:
+        screen.fill(self.background_color) # Fondo de la pantalla
+        screen.blit(self.frase, (100, 50)) # Texto de la pantalla
+        self.button_uno.draw(screen) # Botones de la pantalla

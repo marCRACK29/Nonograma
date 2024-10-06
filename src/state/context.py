@@ -26,13 +26,9 @@ class Context:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-                # Aquí nos aseguramos de que se pase el evento a handle_events
-                if hasattr(self._state, 'handle_events'):
-                    self._state.handle_events(event)
+
+                self._state.handle_events(event)
             # Dibujar el estado actual
-            if self._state is not None:
-                self._state.draw(screen)
-            else:
-                print("No state is set!")  # Depuración
+            self._state.draw(screen)
             pygame.display.flip()
         pygame.quit()

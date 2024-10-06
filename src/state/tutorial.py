@@ -1,36 +1,36 @@
 import pygame
-import os
 from state import State
 from toggle_button import ToggleButton
 
 class Tutorial(State):
     def __init__(self):
         self.background_color = (202, 228, 241)
-        # Obtener la ruta del directorio actual del script
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        # Subir dos niveles de directorio (desde src/state a la raíz del proyecto)
-        project_root = os.path.dirname(os.path.dirname(current_dir))
-        # Construir la ruta completa al archivo de imagen
-        image_path = os.path.join(project_root, 'resources', 'der.png')
-        self.img = pygame.image.load(image_path).convert_alpha()
-        self.button = ToggleButton(100, 100, self.img, 0.8)
 
+        self.texto = pygame.font.SysFont('Arial', 30) # Texto para saber en que estado estamos.
+        self.frase = self.texto.render('Estas en tutorial', True, (0, 0, 0))
+
+        self.img_uno = self.load_image('der.png')
+        self.img_dos = self.load_image('izq.png')
+        self.button_uno = ToggleButton(100, 100, self.img_uno, 0.8)
+        self.button_dos = ToggleButton(100, 300, self.img_dos, 0.8)
 
     def go_to(self) -> None:
-        from inicio import Inicio
-        self.context.transition_to(Inicio())
+        from elegir_tamaño import ElegirTamaño
+        self.context.transition_to(ElegirTamaño())
 
     def back_to(self) -> None:
         from inicio import Inicio
         self.context.transition_to(Inicio())
 
-    def handle_events(self, event):
+    def handle_events(self, event) -> None:
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.button.click():
+            if self.button_uno.click():
                 self.go_to()
+            if self.button_dos.click():
+                self.back_to()
 
-    def draw(self, screen):
-        # Dibujar la ventana gráfica
-        screen.fill(self.background_color)
-        # Dibujar botón
-        self.button.draw(screen)
+    def draw(self, screen)-> None:
+        screen.fill(self.background_color) # Fondo de la pantalla
+        screen.blit(self.frase, (100, 50)) # Texto de la pantalla
+        self.button_uno.draw(screen) # Botones de la pantalla
+        self.button_dos.draw(screen)

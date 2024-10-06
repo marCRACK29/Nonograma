@@ -25,6 +25,6 @@ class ToggleButton:
 
         return accion
 
-    def draw(self, surface):
+    def draw(self, surface) -> None:
         surface.blit(self.image, (self.rect.x, self.rect.y))
 
