@@ -1,4 +1,8 @@
 from enum import Enum
+
+from breezy.switch import switch
+
+
 class Cell_state(Enum):
     empty = 1
     marked = 2
@@ -10,3 +14,14 @@ class Cell:
     def click(self,newState):
         if(self.state == Cell_state.empty):
             self.state = newState
+    def __repr__(self):
+        ret = ""
+        if(self.state==Cell_state.empty):ret=" "
+        elif(self.state==Cell_state.marked):ret="X"
+        elif(self.state==Cell_state.black):ret="@"
+        else:ret="?"
+        return ret
+
+cell = Cell()
+cell.click(Cell_state.black)
+print(cell)
