@@ -5,9 +5,6 @@ from numpy.ma.testutils import assert_equal
 from src.plantilla import *
 
 
-class MyTestCase(unittest.TestCase):
-    def test_something(self):
-        self.assertEqual(True, False)  # add assertion here
 class TestPlantilla(unittest.TestCase):
     def test_createPlantilla(self):
         plantilla = Plantilla(5,5,10,[150,200])
@@ -19,8 +16,8 @@ class TestPlantilla(unittest.TestCase):
         plantilla = Plantilla(5,5,10,[150,200])
         plantilla.click([151,203],Cell_state.black)
         self.assertEqual(plantilla.grid[0][0].state,Cell_state.black)
-        plantilla.click([175,26],Cell_state.marked)
-        self.assertEqual(plantilla.grid[2][2],Cell_state.marked)
+        plantilla.click([175,226],Cell_state.marked)
+        self.assertEqual(plantilla.grid[2][2].state,Cell_state.marked)
 
 if __name__ == '__main__':
     unittest.main()
