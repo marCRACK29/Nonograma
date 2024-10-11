@@ -29,7 +29,8 @@ class Caretaker:
             pickle.dump(self.mementos[len(self.mementos)-1], archivo)
 
     def cargarPartida(self):
-        with open(self.ruta_guardado, "rb") as archivo:
+        ruta_guardado_partida = os.path.join(os.path.dirname(__file__), "guardadoPartida","nonogramaUsuario.pkl" )
+        with open(ruta_guardado_partida, "rb") as archivo:
             m = pickle.load(archivo)
             self.gestor.cargar_estado(m)
 
