@@ -1,6 +1,6 @@
 from enum import Enum
-
-from breezy.switch import switch
+import pygame
+import switch
 
 
 class Cell_state(Enum):
