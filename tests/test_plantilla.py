@@ -1,7 +1,5 @@
 import unittest
 
-from numpy.ma.testutils import assert_equal
-
 from src.plantilla import *
 
 
