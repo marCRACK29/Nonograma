@@ -14,6 +14,7 @@ class Caretaker:
     def añadirMemento(self):
         m = self.gestor.guardar_estado()
         self.mementos.append(m)
+        self.guardar()
 
 
     def guardar(self):

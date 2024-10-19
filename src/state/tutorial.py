@@ -22,7 +22,7 @@ class Tutorial(State):
         from inicio import Inicio
         self.context.transition_to(Inicio())
 
-    def handle_events(self, event) -> None:
+    def handle_events(self, event, caretaker) -> None:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.button_uno.click():
                 self.go_to()

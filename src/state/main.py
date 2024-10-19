@@ -1,6 +1,8 @@
 import pygame
 from context import Context
 from inicio import Inicio
+from src.caretaker import Caretaker
+from src.GestorJuego import GestorJuego
 
 def main():
     pygame.init() # Inicializa Pygame
@@ -10,12 +12,13 @@ def main():
 
     # Crear la primera ventana en mostrarse
     initial_state = Inicio()
-
+    gestor = GestorJuego(20, 50)
+    caretaker = Caretaker(gestor)
     # Crear el contexto con el estado inicial
     context = Context(initial_state)
 
     # Ejecutar el contexto
-    context.run()
+    context.run(caretaker)
 
 if __name__ == "__main__":
     main()

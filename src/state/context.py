@@ -10,14 +10,14 @@ class Context:
         print(f"Transicion a ... {state.__class__.__name__}")
         self._state = state
         self._state.context = self
-
+    """
     def request1(self):
         self._state.go_to()
 
     def request2(self):
         self._state.back_to()
-
-    def run(self):
+    """
+    def run(self, caretaker):
         running = True
         screen = pygame.display.set_mode((800, 600))
         pygame.display.set_caption("Nonograma")
@@ -27,8 +27,8 @@ class Context:
                 if event.type == pygame.QUIT:
                     running = False
 
-                self._state.handle_events(event)
+                self._state.handle_events(event, caretaker)
             # Dibujar el estado actual
             self._state.draw(screen)
-            pygame.display.flip()
+            pygame.display.flip() # Actualizar la pantalla
         pygame.quit()

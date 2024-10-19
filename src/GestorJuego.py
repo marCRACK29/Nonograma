@@ -1,3 +1,4 @@
+from pygame import MOUSEBUTTONDOWN
 from src.memento import mementoJuego
 from src.tablero import Tablero
 from src.Color import Color
@@ -37,36 +38,23 @@ class GestorJuego:
         else :
             print ("Incorrecto") #print de prueba
 
-def main():
-    from src.caretaker import Caretaker
-    pygame.init()
-    screen = pygame.display.set_mode((1000, 1000))
-    pygame.display.set_caption("gestor")
+    def draw(self, screen):
+        #Metodo para dibujar el tablero en la pantalla
+        screen.fill((255, 255, 255))  # Limpia la pantalla con blanco
+        self.tableroJugador.dibujar(screen)  # Dibuja el tablero del jugador
 
-    gestor = GestorJuego(20, 50)
-    caretaker = Caretaker(gestor)
-    caretaker.cargarObjetivo()
+    def handle_events(self, event, caretaker):
+        #Manejar eventos de teclado y mouse
+        if event.type == MOUSEBUTTONDOWN:
+            if event.button == 1:
+                caretaker.añadirMemento()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_l:
+                caretaker.cargar()
+        elif event.type == pygame.USEREVENT:
+            self.comprobar(event.fila, event.columna)
 
+        # Llama al manejo de eventos del tablero del jugador
+        self.tableroJugador.manejar_evento(event)
 
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                return
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_s:
-                    caretaker.añadirMemento()
-                    caretaker.guardar()
-                elif event.key == pygame.K_l:
-                    caretaker.cargar()
-            elif event.type == pygame.USEREVENT:
-                gestor.comprobar(event.fila, event.columna)
-
-            gestor.tableroJugador.manejar_evento(event)
-
-        gestor.tableroJugador.dibujar(screen)
-        pygame.display.flip()
-
-if __name__ == '__main__':
-    main()
 
