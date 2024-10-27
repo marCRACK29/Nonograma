@@ -1,6 +1,7 @@
 import pygame
 from state import State
 from toggle_button import ToggleButton
+from Creacion import Creacion
 
 class Inicio(State):
     def __init__(self):
@@ -11,8 +12,10 @@ class Inicio(State):
 
         self.img_uno = self.load_image('start.png') #Imagenes para los botones.
         self.img_dos = self.load_image('der.png')
+        self.img_tres = self.load_image('izq.png')
         self.button_uno = ToggleButton(100, 100, self.img_uno, 0.8)
         self.button_dos = ToggleButton(300, 200, self.img_dos, 0.8)
+        self.button_tres = ToggleButton(400, 300, self.img_tres, 0.8)
 
     def go_to(self) -> None:
         from elegir_tamaño import ElegirTamaño
@@ -28,9 +31,13 @@ class Inicio(State):
                 self.go_to()
             if self.button_dos.click():
                 self.back_to()
+            if self.button_tres.click():
+                from Creacion import Creacion
+                self.context.transition_to(Creacion())
 
     def draw(self, screen) -> None:
         screen.fill(self.background_color) # Fondo de la pantalla
         screen.blit(self.frase, (100, 50)) # Texto de la pantalla
         self.button_uno.draw(screen) # Botones de la pantalla
         self.button_dos.draw(screen)
+        self.button_tres.draw(screen)

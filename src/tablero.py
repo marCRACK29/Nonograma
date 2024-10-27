@@ -1,4 +1,4 @@
-import  pygame
+import pygame
 import numpy
 from src.casilla import Casilla
 
@@ -19,13 +19,13 @@ class Tablero:
 
     def getCasillas(self):
         return self.casillas
-"""""
+"""
 def main():
     pygame.init()
     screen = pygame.display.set_mode((800, 800))
     pygame.display.set_caption("Tablero")
 
-    tablero = Tablero(20, 50)
+    tablero = Tablero(30, 30)
 
     while True:
         for event in pygame.event.get():
@@ -39,4 +39,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-"""""
+"""

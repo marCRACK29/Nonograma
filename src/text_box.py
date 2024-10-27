@@ -35,7 +35,7 @@ def main():
 
     entrada = Text_box(screen) #<---
     #entrada = Text_box(screen,(100,300),(600,50)) #<---
-"""
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -54,4 +54,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-"""

@@ -1,4 +1,6 @@
 import pygame
+from pygame import MOUSEBUTTONDOWN
+
 from src.tablero import Tablero
 from src.memento import mementoCreacion
 
@@ -16,7 +18,22 @@ class GestorCreacion:
         self.tableroObjetivo = memento.get_state()
         print("Cargado")
 
+    def draw(self, screen):
+        #Metodo para dibujar el tablero en la pantalla
+        screen.fill((255, 255, 255))  # Limpia la pantalla con blanco
+        self.tableroObjetivo.dibujar(screen)  # Dibuja el tablero del jugador
 
+    def handle_events(self, event, caretaker):
+        #Manejar eventos de teclado y mouse
+        if event.type == MOUSEBUTTONDOWN:
+            if event.button == 1:
+                caretaker.añadirMemento()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_l:
+                caretaker.cargar()
+        self.tableroObjetivo.manejar_evento(event)
+
+"""
 def main():
     from src.caretaker import Caretaker
     pygame.init()
@@ -25,7 +42,8 @@ def main():
 
     gestor = GestorCreacion(20, 50)
     caretaker = Caretaker(gestor)
-
+    if type(gestor) is GestorCreacion:
+        print("creacion")
 
     while True:
         for event in pygame.event.get():
@@ -47,3 +65,4 @@ def main():
 if __name__ == '__main__':
 
     main()
+"""

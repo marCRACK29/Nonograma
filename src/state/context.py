@@ -19,7 +19,7 @@ class Context:
     """
     def run(self, caretaker):
         running = True
-        screen = pygame.display.set_mode((800, 600))
+        screen = pygame.display.set_mode((1280, 720))
         pygame.display.set_caption("Nonograma")
 
         while running:

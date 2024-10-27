@@ -25,18 +25,18 @@ class GestorJuego:
 
     def pista(self):
         for i in range(self.tamañoTablero):
-            for ii in range(self.tamañoTablero):
-                C1 = self.tableroObjetivo.getCasillas()[i][ii].get_color()
-                C2 =self.tableroJugador.getCasillas()[i][ii].get_color()
+            for j in range(self.tamañoTablero):
+                C1 = self.tableroObjetivo.getCasillas()[i][j].get_color()
+                C2 =self.tableroJugador.getCasillas()[i][j].get_color()
                 if (C1 != Color.WHITE.value and C2 == Color.WHITE.value):
-                    self.tableroJugador.getCasillas()[i][ii].set_color(C1)
+                    self.tableroJugador.getCasillas()[i][j].set_color(C1)
                     break
 
-    def comprobar(self, i, ii):
-        if(self.tableroJugador.getCasillas()[i][ii].get_color() == self.tableroObjetivo.getCasillas()[i][ii].get_color()):
-            print ("Correcto") #printe de prueba
-        else :
-            print ("Incorrecto") #print de prueba
+    def comprobar(self, i, j):
+        if(self.tableroJugador.getCasillas()[i][j].get_color() == self.tableroObjetivo.getCasillas()[i][j].get_color()):
+            print ("Correcto") #print de prueba
+        #else :
+            #print ("Incorrecto") #print de prueba
 
     def draw(self, screen):
         #Metodo para dibujar el tablero en la pantalla
