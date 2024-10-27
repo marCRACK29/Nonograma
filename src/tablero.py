@@ -1,5 +1,3 @@
-import pygame
-import numpy
 from src.casilla import Casilla
 
 class Tablero:

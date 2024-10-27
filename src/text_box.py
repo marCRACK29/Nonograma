@@ -1,7 +1,5 @@
-
 import pygame
 import pygame_gui
-
 
 class Text_box():
     def __init__(self,screen,xy=(100,300),wh=(600,50)):

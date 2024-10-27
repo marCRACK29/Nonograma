@@ -1,6 +1,5 @@
 import pygame
 from pygame import MOUSEBUTTONDOWN
-
 from src.tablero import Tablero
 from src.memento import mementoCreacion
 

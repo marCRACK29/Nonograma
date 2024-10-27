@@ -20,6 +20,7 @@ class GestorJuego:
         self.tableroJugador, self.tableroObjetivo = memento.get_state()
         print("Cargado")
 
+    #Metodo que permite cargar un tablero objetivo usando un mementoCreacion
     def cargar_objetivo(self, memento):
         self.tableroObjetivo = memento.get_state()
 
@@ -33,15 +34,17 @@ class GestorJuego:
                     break
 
     def comprobar(self, i, j):
+        print(f"Color jugador: {self.tableroJugador.getCasillas()[i][j].get_color()}, Color objetivo: {self.tableroObjetivo.getCasillas()[i][j].get_color()}")
+        print(f"Casillas a comparar: {i},{j}")
         if(self.tableroJugador.getCasillas()[i][j].get_color() == self.tableroObjetivo.getCasillas()[i][j].get_color()):
             print ("Correcto") #print de prueba
-        #else :
-            #print ("Incorrecto") #print de prueba
+        else :
+            print ("Incorrecto") #print de prueba
 
     def draw(self, screen):
         #Metodo para dibujar el tablero en la pantalla
         screen.fill((255, 255, 255))  # Limpia la pantalla con blanco
-        self.tableroJugador.dibujar(screen)  # Dibuja el tablero del jugador
+        self.tableroObjetivo.dibujar(screen)  # Dibuja el tablero del jugador
 
     def handle_events(self, event, caretaker):
         #Manejar eventos de teclado y mouse
@@ -56,5 +59,3 @@ class GestorJuego:
 
         # Llama al manejo de eventos del tablero del jugador
         self.tableroJugador.manejar_evento(event)
-
-
