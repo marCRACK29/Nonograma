@@ -20,17 +20,12 @@ class Caretaker:
     def guardar(self):
         try:
             gestor_type = type(self.gestor).__name__
-            print(f"Tipo de gestor actual: {gestor_type}")
 
             # Usar el nombre de la clase directamente
             if gestor_type == "GestorCreacion":
-                print("Guardando desde GestorCreacion")
                 ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "nonogramaUsuarioCreacion.pkl")
-                print("Se sobreescribe creacion")
             elif gestor_type == "GestorJuego":
-                print("Guardando desde GestorJuego")
                 ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "partida.pkl")
-                print("Se sobreescribe juego")
             else:
                 print(f"Tipo de gestor no reconocido: {gestor_type}")
                 return
@@ -79,30 +74,11 @@ class Caretaker:
     def cargarObjetivo(self):
         try:
             ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion","nonogramaUsuarioCreacion.pkl")
-            print("\n=== Inicio de carga de objetivo ===")
             print(f"Intentando cargar desde: {ruta_cargado}")
 
             with open(ruta_cargado, "rb") as archivo:
                 m = pickle.load(archivo)
-                print("\nMemento cargado:")
-                print(f"Tipo de memento: {type(m)}")
-
-                # Verificar el estado del memento
-                tablero = m.get_state()
-                print("\nEstado obtenido del memento:")
-                print(f"Tipo de dato: {type(tablero)}")
-                print("Colores del tablero:")
-                for i, fila in enumerate(tablero.getCasillas()):
-                    print(f"Fila {i}: {[casilla.get_color() for casilla in fila]}")
-
-                print("\nPasando memento a gestor.cargar_objetivo...")
                 self.gestor.cargar_objetivo(m)
-
-                print("\nVerificando estado final en gestor:")
-                for i, fila in enumerate(self.gestor.tableroObjetivo.getCasillas()):
-                    print(f"Fila {i}: {[casilla.get_color() for casilla in fila]}")
-
-                print("=== Fin de carga de objetivo ===\n")
 
         except Exception as e:
             print(f"\n¡ERROR al cargar objetivo!: {str(e)}")

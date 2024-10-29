@@ -26,4 +26,4 @@ class Casilla:
         if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
             if self.rect.collidepoint(evento.pos):
                 self.set_color()
-                pygame.event.post(pygame.event.Event(pygame.USEREVENT, {'columna': self.columna, 'fila': self.fila}))
+                pygame.event.post(pygame.event.Event(pygame.USEREVENT, {'columna': self.columna, 'fila': self.fila, 'color': self.color}))

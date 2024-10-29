@@ -37,7 +37,7 @@ class GestorCreacion:
                 caretaker.cargarPartida()
         self.tableroObjetivo.manejar_evento(event)
 
-"""
+
 def main():
     from src.caretaker import Caretaker
     pygame.init()
@@ -69,4 +69,3 @@ def main():
 if __name__ == '__main__':
 
     main()
-"""

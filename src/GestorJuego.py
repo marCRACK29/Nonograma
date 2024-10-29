@@ -13,7 +13,7 @@ class GestorJuego:
 
     def guardar_estado(self):
         m = mementoJuego(self.tableroJugador, self.tableroObjetivo)
-        print("Guardado")
+        print("Creando mementoJuego")
         return m
 
     def cargar_estado(self, memento):
@@ -31,12 +31,6 @@ class GestorJuego:
             self.tableroObjetivo = tablero_cargado[0]  # Si es una tupla, tomar el primer elemento
         else:
             self.tableroObjetivo = tablero_cargado
-        print("Objetivo cargado")
-
-        # Debug: verificar el estado después de cargar
-        print("Estado del tablero después de cargar:")
-        for fila in self.tableroObjetivo.getCasillas():
-            print([casilla.get_color() for casilla in fila])
 
     def pista(self):
         for i in range(self.tamañoTablero):
@@ -47,13 +41,15 @@ class GestorJuego:
                     self.tableroJugador.getCasillas()[i][j].set_color(C1)
                     break
 
-    def comprobar(self, i, j):
-        print(f"Color jugador: {self.tableroJugador.getCasillas()[i][j].get_color()}, Color objetivo: {self.tableroObjetivo.getCasillas()[i][j].get_color()}")
-        print(f"Casillas a comparar: {i},{j}")
-        if(self.tableroJugador.getCasillas()[i][j].get_color() == self.tableroObjetivo.getCasillas()[i][j].get_color()):
+    def comprobar(self, i, j, color):
+        colorJugador = color
+        colorObjetivo = self.tableroObjetivo.getCasillas()[i][j].get_color()
+        if(colorJugador == colorObjetivo):
             print ("Correcto") #print de prueba
         else :
             print ("Incorrecto") #print de prueba
+
+
 
     def draw(self, screen):
         #Metodo para dibujar el tablero en la pantalla
@@ -70,8 +66,7 @@ class GestorJuego:
                 caretaker.cargarPartida()
         self.tableroJugador.manejar_evento(event)
         if event.type == pygame.USEREVENT:
-            self.comprobar(event.fila, event.columna)
-
+            self.comprobar(event.fila, event.columna, event.color)
 
 """
 def main():
@@ -83,10 +78,6 @@ def main():
     gestor = GestorJuego(10, 50)
     caretaker = Caretaker(gestor)
     caretaker.cargarObjetivo()  # Cargar el tablero objetivo al inicio
-
-    print("Estado inicial del tablero objetivo:")
-    for fila in gestor.tableroObjetivo.getCasillas():
-        print([casilla.get_color() for casilla in fila])
 
     while True:
         for event in pygame.event.get():
