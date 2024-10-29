@@ -14,8 +14,13 @@ class GestorCreacion:
         return m
 
     def cargar_estado(self, memento):
-        self.tableroObjetivo = memento.get_state()
+        tablero_cargado = memento.get_state()
+        if isinstance(tablero_cargado, tuple):
+            self.tableroObjetivo = tablero_cargado[0]  # Si es una tupla, tomar el primer elemento
+        else:
+            self.tableroObjetivo = tablero_cargado
         print("Cargado")
+
 
     def draw(self, screen):
         #Metodo para dibujar el tablero en la pantalla
@@ -29,17 +34,17 @@ class GestorCreacion:
                 caretaker.añadirMemento()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_l:
-                caretaker.cargar()
+                caretaker.cargarPartida()
         self.tableroObjetivo.manejar_evento(event)
 
-"""
+
 def main():
     from src.caretaker import Caretaker
     pygame.init()
     screen = pygame.display.set_mode((1000, 1000))
     pygame.display.set_caption("gestor")
 
-    gestor = GestorCreacion(20, 50)
+    gestor = GestorCreacion(10, 50)
     caretaker = Caretaker(gestor)
     if type(gestor) is GestorCreacion:
         print("creacion")
@@ -56,12 +61,11 @@ def main():
                 elif event.key == pygame.K_l:
                     caretaker.cargarPartida()
 
-            gestor.tableroObjetivo.manejar_evento(event)
+            gestor.handle_events(event, caretaker)
 
-        gestor.tableroObjetivo.dibujar(screen)
+        gestor.draw(screen)
         pygame.display.flip()
 
 if __name__ == '__main__':
 
     main()
-"""
