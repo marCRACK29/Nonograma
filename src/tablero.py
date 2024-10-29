@@ -3,7 +3,7 @@ from src.casilla import Casilla
 class Tablero:
     def __init__(self,tamaño, tamañoCasilla):
         self.tamaño = tamaño
-        self.casillas = [[Casilla(y * tamañoCasilla, x * tamañoCasilla, tamañoCasilla, x, y) for x in range(tamaño)] for y in range(tamaño)]
+        self.casillas = [[Casilla(y * tamañoCasilla, x * tamañoCasilla, tamañoCasilla, y, x) for x in range(tamaño)] for y in range(tamaño)]
 
     def dibujar(self, screen):
         for fila in self.casillas:

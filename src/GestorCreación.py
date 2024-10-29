@@ -1,8 +1,11 @@
 import pygame
+from aptdaemon.logger import BLACK
 from pygame import MOUSEBUTTONDOWN
+
+from src.Proxy import Proxy
 from src.tablero import Tablero
 from src.memento import mementoCreacion
-
+from src.Color import Color
 class GestorCreacion:
 
     def __init__(self, tamañoTablero, tamañoCasilla):
@@ -35,6 +38,16 @@ class GestorCreacion:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_l:
                 caretaker.cargarPartida()
+            elif event.key == pygame.K_1:
+                Proxy.set_color(Color.BLACK)
+            elif event.key == pygame.K_2:
+                Proxy.set_color(Color.RED)
+            elif event.key == pygame.K_3:
+                Proxy.set_color(Color.YELLOW)
+            elif event.key == pygame.K_4:
+                Proxy.set_color(Color.PINK)
+            elif event.key == pygame.K_5:
+                Proxy.set_color(Color.BLUE)
         self.tableroObjetivo.manejar_evento(event)
 
 

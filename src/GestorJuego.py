@@ -2,6 +2,7 @@ from pygame import MOUSEBUTTONDOWN
 from src.memento import mementoJuego, mementoCreacion
 from src.tablero import Tablero
 from src.Color import Color
+from src.Proxy import Proxy
 import pygame
 
 class GestorJuego:
@@ -31,6 +32,7 @@ class GestorJuego:
             self.tableroObjetivo = tablero_cargado[0]  # Si es una tupla, tomar el primer elemento
         else:
             self.tableroObjetivo = tablero_cargado
+
 
     def pista(self):
         for i in range(self.tamañoTablero):
@@ -64,11 +66,21 @@ class GestorJuego:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_l:
                 caretaker.cargarPartida()
+            elif event.key == pygame.K_1:
+                Proxy.set_color(Color.BLACK)
+            elif event.key == pygame.K_2:
+                Proxy.set_color(Color.RED)
+            elif event.key == pygame.K_3:
+                Proxy.set_color(Color.YELLOW)
+            elif event.key == pygame.K_4:
+                Proxy.set_color(Color.PINK)
+            elif event.key == pygame.K_5:
+                Proxy.set_color(Color.BLUE)
         self.tableroJugador.manejar_evento(event)
         if event.type == pygame.USEREVENT:
             self.comprobar(event.fila, event.columna, event.color)
 
-"""
+
 def main():
     from src.caretaker import Caretaker
     pygame.init()
@@ -96,4 +108,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-"""
