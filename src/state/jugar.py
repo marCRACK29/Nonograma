@@ -16,6 +16,7 @@ class Jugar(State):
 
         self.gestor = GestorJuego(10, 50)
         self.caretaker = Caretaker(self.gestor)
+        self.caretaker.cargarObjetivo()
 
     def go_to(self) -> None:
         from inicio import Inicio

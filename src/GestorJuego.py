@@ -68,13 +68,12 @@ class GestorJuego:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_l:
                 caretaker.cargarPartida()
-        elif event.type == pygame.USEREVENT:
+        self.tableroJugador.manejar_evento(event)
+        if event.type == pygame.USEREVENT:
             self.comprobar(event.fila, event.columna)
 
-        # Llama al manejo de eventos del tablero del jugador
-        self.tableroJugador.manejar_evento(event)
 
-
+"""
 def main():
     from src.caretaker import Caretaker
     pygame.init()
@@ -106,3 +105,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+"""
