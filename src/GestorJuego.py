@@ -33,6 +33,7 @@ class GestorJuego:
         else:
             self.tableroObjetivo = tablero_cargado
 
+
     def pista(self):
         for i in range(self.tamañoTablero):
             for j in range(self.tamañoTablero):
@@ -44,7 +45,7 @@ class GestorJuego:
 
     def comprobar(self, i, j, color):
         colorJugador = color
-        colorObjetivo = self.tableroObjetivo.getCasillas()[j][i].get_color()
+        colorObjetivo = self.tableroObjetivo.getCasillas()[i][j].get_color()
         if(colorJugador == colorObjetivo):
             print ("Correcto") #print de prueba
         else :
