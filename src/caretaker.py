@@ -16,31 +16,74 @@ class Caretaker:
         self.mementos.append(m)
         self.guardar()
 
-
+    #Metodo para guardar la partida en curso en memoria
     def guardar(self):
-        print(f"El tipo de gestor es: {type(self.gestor).__name__}")
-        if self.ruta_guardado is None:
-            if type(self.gestor) is GestorCreacion:
-                self.ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "nonogramaUsuarioCreacion.pkl")
+        try:
+            gestor_type = type(self.gestor).__name__
+
+            # Usar el nombre de la clase directamente
+            if gestor_type == "GestorCreacion":
+                ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "nonogramaUsuarioCreacion.pkl")
+            elif gestor_type == "GestorJuego":
+                ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "partida.pkl")
             else:
-                self.ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorJuego","nonogramaUsuarioJuego.pkl" )
+                print(f"Tipo de gestor no reconocido: {gestor_type}")
+                return
 
-        with open(self.ruta_guardado, "wb") as archivo:
-            pickle.dump(self.mementos[len(self.mementos)-1], archivo)
+            with open(ruta_guardado, "wb") as archivo:
+                m = self.gestor.guardar_estado()
+                pickle.dump(m, archivo)
 
-    #Este metodo tiene que arreglarse para su buen funcionamiento posterior, beta
+        except Exception as e:
+            print(f"Error al guardar: {str(e)}")
+            import traceback
+            traceback.print_exc()
+
+    #Este metodo para cargar la ultima partida jugada en memoria
     def cargarPartida(self):
-        ruta_guardado_partida = os.path.join(os.path.dirname(__file__), "guardadoPartida","nonogramaUsuario.pkl" )
-        with open(ruta_guardado_partida, "rb") as archivo:
+        try:
+            gestor_type = type(self.gestor).__name__
+            print(f"Tipo de gestor actual al cargar: {gestor_type}")
+
+            if gestor_type == "GestorCreacion":
+                print("Cargando desde GestorCreacion")
+                ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "nonogramaUsuarioCreacion.pkl")
+                print("Se carga creacion")
+            elif gestor_type == "GestorJuego":
+                print("Cargando desde GestorJuego")
+                ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorJuego", "nonogramaUsuarioJuego.pkl")
+                print("Se carga juego")
+            else:
+                print(f"Tipo de gestor no reconocido al cargar: {gestor_type}")
+                return
+
+            with open(ruta_cargado, "rb") as archivo:
+                m = pickle.load(archivo)
+                self.gestor.cargar_estado(m)
+
+        except Exception as e:
+            print(f"Error al cargar: {str(e)}")
+            import traceback
+            traceback.print_exc()
+
+        with open(ruta_cargado, "rb") as archivo:
             m = pickle.load(archivo)
             self.gestor.cargar_estado(m)
 
-    #metodo experimental enfocado a gestorJuego
+    #metodo que permite cargar un nonograma Objetivo para poder jugar
     def cargarObjetivo(self):
-        ruta_cargado= os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion",  "nonogramaUsuarioCreacion.pkl")
-        with open(ruta_cargado, "rb") as archivo:
-            m = pickle.load(archivo)  #Se carga un mementoCreacion desde memoria
-            self.gestor.cargar_objetivo(m)
+        try:
+            ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion","nonogramaUsuarioCreacion.pkl")
+            print(f"Intentando cargar desde: {ruta_cargado}")
+
+            with open(ruta_cargado, "rb") as archivo:
+                m = pickle.load(archivo)
+                self.gestor.cargar_objetivo(m)
+
+        except Exception as e:
+            print(f"\n¡ERROR al cargar objetivo!: {str(e)}")
+            import traceback
+            traceback.print_exc()
 """
 if __name__ == '__main__':
     caretaker = Caretaker(GestorCreacion(20, 50))

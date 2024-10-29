@@ -1,5 +1,5 @@
 from pygame import MOUSEBUTTONDOWN
-from src.memento import mementoJuego
+from src.memento import mementoJuego, mementoCreacion
 from src.tablero import Tablero
 from src.Color import Color
 import pygame
@@ -13,16 +13,24 @@ class GestorJuego:
 
     def guardar_estado(self):
         m = mementoJuego(self.tableroJugador, self.tableroObjetivo)
-        print("Guardado")
+        print("Creando mementoJuego")
         return m
 
     def cargar_estado(self, memento):
-        self.tableroJugador, self.tableroObjetivo = memento.get_state()
+        tableros_cargados = memento.get_state()
+        if isinstance(tableros_cargados, tuple):
+            self.tableroJugador, self.tableroObjetivo = tableros_cargados
+        else:
+            self.tableroJugador = tableros_cargados
         print("Cargado")
 
     #Metodo que permite cargar un tablero objetivo usando un mementoCreacion
     def cargar_objetivo(self, memento):
-        self.tableroObjetivo = memento.get_state()
+        tablero_cargado = memento.get_state()
+        if isinstance(tablero_cargado, tuple):
+            self.tableroObjetivo = tablero_cargado[0]  # Si es una tupla, tomar el primer elemento
+        else:
+            self.tableroObjetivo = tablero_cargado
 
     def pista(self):
         for i in range(self.tamañoTablero):
@@ -33,18 +41,20 @@ class GestorJuego:
                     self.tableroJugador.getCasillas()[i][j].set_color(C1)
                     break
 
-    def comprobar(self, i, j):
-        print(f"Color jugador: {self.tableroJugador.getCasillas()[i][j].get_color()}, Color objetivo: {self.tableroObjetivo.getCasillas()[i][j].get_color()}")
-        print(f"Casillas a comparar: {i},{j}")
-        if(self.tableroJugador.getCasillas()[i][j].get_color() == self.tableroObjetivo.getCasillas()[i][j].get_color()):
+    def comprobar(self, i, j, color):
+        colorJugador = color
+        colorObjetivo = self.tableroObjetivo.getCasillas()[i][j].get_color()
+        if(colorJugador == colorObjetivo):
             print ("Correcto") #print de prueba
         else :
             print ("Incorrecto") #print de prueba
 
+
+
     def draw(self, screen):
         #Metodo para dibujar el tablero en la pantalla
         screen.fill((255, 255, 255))  # Limpia la pantalla con blanco
-        self.tableroObjetivo.dibujar(screen)  # Dibuja el tablero del jugador
+        self.tableroJugador.dibujar(screen)  # Dibuja el tablero del jugador
 
     def handle_events(self, event, caretaker):
         #Manejar eventos de teclado y mouse
@@ -53,9 +63,37 @@ class GestorJuego:
                 caretaker.añadirMemento()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_l:
-                caretaker.cargar()
-        elif event.type == pygame.USEREVENT:
-            self.comprobar(event.fila, event.columna)
-
-        # Llama al manejo de eventos del tablero del jugador
+                caretaker.cargarPartida()
         self.tableroJugador.manejar_evento(event)
+        if event.type == pygame.USEREVENT:
+            self.comprobar(event.fila, event.columna, event.color)
+
+"""
+def main():
+    from src.caretaker import Caretaker
+    pygame.init()
+    screen = pygame.display.set_mode((1000, 1000))
+    pygame.display.set_caption("gestor")
+
+    gestor = GestorJuego(10, 50)
+    caretaker = Caretaker(gestor)
+    caretaker.cargarObjetivo()  # Cargar el tablero objetivo al inicio
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_s:
+                    caretaker.añadirMemento()
+
+            gestor.handle_events(event, caretaker)
+
+        gestor.draw(screen)
+        pygame.display.flip()
+
+
+if __name__ == '__main__':
+    main()
+"""
