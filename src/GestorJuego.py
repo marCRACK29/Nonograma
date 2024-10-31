@@ -1,4 +1,3 @@
-from aptdaemon.logger import WHITE
 from pygame import MOUSEBUTTONDOWN
 from src.memento import mementoJuego, mementoCreacion
 from src.tablero import Tablero
@@ -83,34 +82,24 @@ class GestorJuego:
 
     #Metodo para determinar pistas numéricas paras las filas dado un nonograma Objetivo
     def pistasFilas(self):
-        casillas = self.tableroObjetivo.getCasillas()
-        numeritosFilas = [] #Arreglo que almacenará todas las pistas numéricas de filas
-        for columna in range(self.tamañoTablero):
-            datos_aux = [] #Arreglo que almacenará los pares (cantidad, color) presentes en la columna dada
+        casillas = self.tableroObjetivo.getCasillas() #obtiene una lista de casillas del tablero objetivo.
+        numeritosFilas = [] # crea una lista para almacenar secuencias de color y tamaño para cada fila.
+        for columna in range(self.tamañoTablero): # Itera sobre cada columna del tablero
+            datos_aux = [] # una lista temporal para almacenar las secuencias de colores y sus longitudes en la columna.
             color_actual = Color.WHITE.value #Color actual
-            contador = 0  # Contador para la secuencia actual
-            datos_contador = 0  # Contador para el índice de datos en datos_aux
-            for fila in range (self.tamañoTablero):
-                color_casilla = casillas[fila][columna].get_color()
-                # Si el color cambia
+            contador = 0  # cuenta la longitud de la secuencia de colores actuales.
+            for fila in range (self.tamañoTablero): # se itera sobre cada fila de la columna actual
+                color_casilla = casillas[fila][columna].get_color() #obtiene el color de la casilla actual
+                # Si el color cambia y el color previo no era blanco, guarda la secuencia
                 if color_actual != color_casilla:
-                    # Si veníamos contando un color no blanco
                     if color_actual != Color.WHITE.value:
                         datos_aux.append([contador, color_actual])
-                        datos_contador += 1
-
-                    # Si el nuevo color no es blanco, empezamos a contar
-                    if color_casilla != Color.WHITE.value:
-                        contador = 1
-                        color_actual = color_casilla
-                    else:
-                        contador = 0
-                        color_actual = Color.WHITE.value
-
-                # Si el color es el mismo y no es blanco
+                    #reinicia el contador o continúa según el nuevo color
+                    contador = 1 if color_casilla != Color.WHITE.value else 0
+                    color_actual = color_casilla
                 elif color_casilla != Color.WHITE.value:
                     contador += 1
-                    # No olvidar la última secuencia si termina con color
+
             if contador > 0 and color_actual != Color.WHITE.value:
                 datos_aux.append([contador, color_actual])
             numeritosFilas.append(datos_aux)
@@ -123,28 +112,19 @@ class GestorJuego:
             datos_aux = []  # Arreglo que almacenará los pares (cantidad, color) presentes en la fila dada
             color_actual = Color.WHITE.value  # Color actual
             contador = 0  # Contador para la secuencia actual
-            datos_contador = 0  # Contador para el índice de datos en datos_aux
             for columna in range(self.tamañoTablero):
                 color_casilla = casillas[fila][columna].get_color()
                 # Si el color cambia
                 if color_actual != color_casilla:
-                    # Si veníamos contando un color no blanco
                     if color_actual != Color.WHITE.value:
                         datos_aux.append([contador, color_actual])
-                        datos_contador += 1
 
-                    # Si el nuevo color no es blanco, empezamos a contar
-                    if color_casilla != Color.WHITE.value:
-                        contador = 1
-                        color_actual = color_casilla
-                    else:
-                        contador = 0
-                        color_actual = Color.WHITE.value
-
-                # Si el color es el mismo y no es blanco
+                    contador = 1 if color_casilla != Color.WHITE.value else 0
+                    color_actual = color_casilla
                 elif color_casilla != Color.WHITE.value:
                     contador += 1
-                    # No olvidar la última secuencia si termina con color
+
+            # No olvidar la última secuencia si termina con color
             if contador > 0 and color_actual != Color.WHITE.value:
                 datos_aux.append([contador, color_actual])
             numeritosColumnas.append(datos_aux)

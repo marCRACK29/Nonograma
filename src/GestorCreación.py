@@ -1,5 +1,4 @@
 import pygame
-from aptdaemon.logger import BLACK
 from pygame import MOUSEBUTTONDOWN
 
 from src.Proxy import Proxy

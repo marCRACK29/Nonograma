@@ -13,9 +13,9 @@ def main():
 
     # Crear la primera ventana en mostrarse
     initial_state = Inicio()
-    gestor = GestorJuego(10, 50)
+    gestor = GestorCreacion(10, 50)
     caretaker = Caretaker(gestor)
-    caretaker.cargarObjetivo()
+    #caretaker.cargarObjetivo()
     # Crear el contexto con el estado inicial
     context = Context(initial_state)
 
