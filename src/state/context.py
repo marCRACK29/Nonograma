@@ -17,7 +17,7 @@ class Context:
     def request2(self):
         self._state.back_to()
     """
-    def run(self, caretaker):
+    def run(self):
         running = True
         screen = pygame.display.set_mode((1280, 720))
         pygame.display.set_caption("Nonograma")
@@ -27,7 +27,7 @@ class Context:
                 if event.type == pygame.QUIT:
                     running = False
 
-                self._state.handle_events(event, caretaker)
+                self._state.handle_events(event)
             # Dibujar el estado actual
             self._state.draw(screen)
             pygame.display.flip() # Actualizar la pantalla

@@ -84,11 +84,3 @@ class Caretaker:
             print(f"\n¡ERROR al cargar objetivo!: {str(e)}")
             import traceback
             traceback.print_exc()
-"""
-if __name__ == '__main__':
-    caretaker = Caretaker(GestorCreacion(20, 50))
-    caretaker.cargarPartida()
-    caretaker.añadirMemento()
-    caretaker.guardar()
-    #caretaker.cargarObjetivo
-"""
