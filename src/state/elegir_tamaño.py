@@ -22,7 +22,7 @@ class ElegirTamaño(State):
         from inicio import Inicio
         self.context.transition_to(Inicio())
 
-    def handle_events(self, event, caretaker) -> None:
+    def handle_events(self, event) -> None:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.button_uno.click():
                 self.go_to()

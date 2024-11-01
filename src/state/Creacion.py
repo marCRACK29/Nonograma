@@ -1,6 +1,5 @@
 import pygame
 from state import State
-from toggle_button import ToggleButton
 from src.GestorCreación import GestorCreacion
 from src.caretaker import Caretaker
 
@@ -20,8 +19,8 @@ class Creacion(State):
     def back_to(self) -> None:
         pass
 
-    def handle_events(self, event, caretaker) -> None:
-        self.gestor.handle_events(event, caretaker)
+    def handle_events(self, event) -> None:
+        self.gestor.handle_events(event, self.caretaker)
 
     def draw(self, screen) -> None:
         screen.fill(self.background_color) # Fondo de la pantalla

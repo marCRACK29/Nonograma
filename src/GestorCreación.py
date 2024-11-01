@@ -40,7 +40,7 @@ class GestorCreacion:
             elif event.key == pygame.K_1:
                 Proxy.set_color(Color.BLACK)
             elif event.key == pygame.K_2:
-                Proxy.set_color(Color.RED)
+                Proxy.set_color(Color.WHITE)
             elif event.key == pygame.K_3:
                 Proxy.set_color(Color.YELLOW)
             elif event.key == pygame.K_4:
@@ -48,36 +48,3 @@ class GestorCreacion:
             elif event.key == pygame.K_5:
                 Proxy.set_color(Color.BLUE)
         self.tableroObjetivo.manejar_evento(event)
-
-
-def main():
-    from src.caretaker import Caretaker
-    pygame.init()
-    screen = pygame.display.set_mode((1000, 1000))
-    pygame.display.set_caption("gestor")
-
-    gestor = GestorCreacion(10, 50)
-    caretaker = Caretaker(gestor)
-    if type(gestor) is GestorCreacion:
-        print("creacion")
-
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                return
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_s:
-                    caretaker.añadirMemento()
-                    caretaker.guardar()
-                elif event.key == pygame.K_l:
-                    caretaker.cargarPartida()
-
-            gestor.handle_events(event, caretaker)
-
-        gestor.draw(screen)
-        pygame.display.flip()
-
-if __name__ == '__main__':
-
-    main()

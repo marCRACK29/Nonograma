@@ -11,12 +11,13 @@ class GestorJuego:
         self.numeritosFilas = []
         self.numeritosColumnas = []
         self.tamañoTablero = tamañoTablero
+        self.tamañoCasilla = tamañoCasilla
         self.tableroObjetivo = Tablero(tamañoTablero, tamañoCasilla)
         self.tableroJugador = Tablero(tamañoTablero, tamañoCasilla)
 
     def guardar_estado(self):
         m = mementoJuego(self.tableroJugador, self.tableroObjetivo)
-        print("Creando mementoJuego")
+        #print("Creando mementoJuego")
         return m
 
     def cargar_estado(self, memento):
@@ -34,17 +35,17 @@ class GestorJuego:
             self.tableroObjetivo = tablero_cargado[0]  # Si es una tupla, tomar el primer elemento
         else:
             self.tableroObjetivo = tablero_cargado
-        self.print_numeritos()
+        self.pistasColumnas()
+        self.pistasFilas()
 
     #Metodo solo para verificar pistas numericas de filas y columnas, una vez implementadas las pistas de forma gráfica quitar este metodo
+    """
     def print_numeritos(self):
-        self.pistasFilas()
-        self.pistasColumnas()
         print("\n=== Numeritos de las Filas ===")
-        for i, columna in enumerate(self.numeritosFilas):
+        for i, fila in enumerate(self.numeritosFilas):
             print(f"Fila {i}:", end=" ")
-            if columna:
-                for valor in columna:
+            if fila:
+                for valor in fila:
                     print(valor, end=" ")
             else:
                 print("vacía", end="")
@@ -60,6 +61,7 @@ class GestorJuego:
                 print("vacía", end="")
             print()  # Nueva línea después de cada columna
         print("===============================\n")
+        """
 
     #Metodo que pinta una casilla correcta para ayudar al jugador
     def ayuda(self):
@@ -71,7 +73,7 @@ class GestorJuego:
                     self.tableroJugador.getCasillas()[i][j].set_color(C1)
                     break
 
-    #Método que verifica que la ultima casilla pintada haya sido correcta
+    #Metodo que verifica que la última casilla pintada haya sido correcta
     def comprobar(self, i, j, color):
         colorJugador = color
         colorObjetivo = self.tableroObjetivo.getCasillas()[i][j].get_color()
@@ -85,7 +87,7 @@ class GestorJuego:
         casillas = self.tableroObjetivo.getCasillas() #obtiene una lista de casillas del tablero objetivo.
         numeritosFilas = [] # crea una lista para almacenar secuencias de color y tamaño para cada fila.
         for columna in range(self.tamañoTablero): # Itera sobre cada columna del tablero
-            datos_aux = [] # una lista temporal para almacenar las secuencias de colores y sus longitudes en la columna.
+            pfila = [] # una lista temporal para almacenar las secuencias de colores y sus longitudes en la columna.
             color_actual = Color.WHITE.value #Color actual
             contador = 0  # cuenta la longitud de la secuencia de colores actuales.
             for fila in range (self.tamañoTablero): # se itera sobre cada fila de la columna actual
@@ -93,7 +95,7 @@ class GestorJuego:
                 # Si el color cambia y el color previo no era blanco, guarda la secuencia
                 if color_actual != color_casilla:
                     if color_actual != Color.WHITE.value:
-                        datos_aux.append([contador, color_actual])
+                        pfila.append([contador, color_actual])
                     #reinicia el contador o continúa según el nuevo color
                     contador = 1 if color_casilla != Color.WHITE.value else 0
                     color_actual = color_casilla
@@ -101,8 +103,8 @@ class GestorJuego:
                     contador += 1
 
             if contador > 0 and color_actual != Color.WHITE.value:
-                datos_aux.append([contador, color_actual])
-            numeritosFilas.append(datos_aux)
+                pfila.append([contador, color_actual])
+            numeritosFilas.append(pfila)
         self.numeritosFilas = numeritosFilas #Se guarda como valor de clase
 
     def pistasColumnas(self):
@@ -130,12 +132,37 @@ class GestorJuego:
             numeritosColumnas.append(datos_aux)
         self.numeritosColumnas = numeritosColumnas #Se guarda como valor de la clase
 
-
-
     def draw(self, screen):
         #Metodo para dibujar el tablero en la pantalla
         screen.fill((255, 255, 255))  # Limpia la pantalla con blanco
-        self.tableroJugador.dibujar(screen)  # Dibuja el tablero del jugador
+        tamañoCasilla = self.tamañoCasilla
+        desfase_x = 150
+        desfase_y = 150
+        fuente = pygame.font.Font(None, 20)
+        for col, pistas in enumerate(self.numeritosColumnas):
+            y_pos = desfase_y- 20  # Empezamos arriba del tablero
+            x_pos = desfase_x + (col * tamañoCasilla) + (tamañoCasilla // 2)
+            for pista in reversed(pistas):  # Reversed para que se apilen hacia arriba
+                cantidad = str(pista[0])
+                color = pista[1]
+                text = fuente.render(cantidad, True, color)
+                text_rect = text.get_rect(center=(x_pos, y_pos))
+                screen.blit(text, text_rect)
+                y_pos -= 20  # Movemos hacia arriba para la siguiente pista
+
+        # Dibujar pistas de filas (izquierda del tablero)
+        for fila, pistas in enumerate(self.numeritosFilas):
+            x_pos = desfase_x - 20  # Empezamos a la izquierda del tablero
+            y_pos = desfase_y + (fila * tamañoCasilla) + (tamañoCasilla // 2)
+            for pista in reversed(pistas):  # Reversed para que se alineen de derecha a izquierda
+                cantidad = str(pista[0])
+                color = pista[1]
+                text = fuente.render(cantidad, True, color)
+                text_rect = text.get_rect(center=(x_pos, y_pos))
+                screen.blit(text, text_rect)
+                x_pos -= 20  # Movemos hacia la izquierda para la siguiente pista
+
+        self.tableroJugador.dibujar(screen, desfase_x, desfase_y)  # Dibuja el tablero del jugador
 
     def handle_events(self, event, caretaker):
         #Manejar eventos de teclado y mouse
@@ -148,13 +175,14 @@ class GestorJuego:
             elif event.key == pygame.K_1:
                 Proxy.set_color(Color.BLACK)
             elif event.key == pygame.K_2:
-                Proxy.set_color(Color.RED)
+                Proxy.set_color(Color.WHITE)
             elif event.key == pygame.K_3:
                 Proxy.set_color(Color.YELLOW)
             elif event.key == pygame.K_4:
                 Proxy.set_color(Color.PINK)
             elif event.key == pygame.K_5:
                 Proxy.set_color(Color.BLUE)
+
         self.tableroJugador.manejar_evento(event)
         if event.type == pygame.USEREVENT:
             self.comprobar(event.fila, event.columna, event.color)
