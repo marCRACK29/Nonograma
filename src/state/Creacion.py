@@ -1,6 +1,6 @@
 import pygame
 from state import State
-from src.GestorCreación import GestorCreacion
+from src.GestorCreacion import GestorCreacion
 from src.caretaker import Caretaker
 
 class Creacion(State):

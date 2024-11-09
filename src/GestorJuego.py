@@ -38,31 +38,6 @@ class GestorJuego:
         self.pistasColumnas()
         self.pistasFilas()
 
-    #Metodo solo para verificar pistas numericas de filas y columnas, una vez implementadas las pistas de forma gráfica quitar este metodo
-    """
-    def print_numeritos(self):
-        print("\n=== Numeritos de las Filas ===")
-        for i, fila in enumerate(self.numeritosFilas):
-            print(f"Fila {i}:", end=" ")
-            if fila:
-                for valor in fila:
-                    print(valor, end=" ")
-            else:
-                print("vacía", end="")
-            print()  # Nueva línea después de cada columna
-        print("===============================\n")
-        print("\n=== Numeritos de las Columnas ===")
-        for i, columna in enumerate(self.numeritosColumnas):
-            print(f"Columna {i}:", end=" ")
-            if columna:
-                for valor in columna:
-                    print(valor, end=" ")
-            else:
-                print("vacía", end="")
-            print()  # Nueva línea después de cada columna
-        print("===============================\n")
-        """
-
     #Metodo que pinta una casilla correcta para ayudar al jugador
     def ayuda(self):
         for i in range(self.tamañoTablero):

@@ -1,7 +1,7 @@
 import os
 import pickle
 
-from src.GestorCreación import GestorCreacion
+from src.GestorCreacion import GestorCreacion
 from src.GestorJuego import GestorJuego
 
 
