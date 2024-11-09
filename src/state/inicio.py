@@ -1,7 +1,6 @@
 import pygame
 from state import State
 from toggle_button import ToggleButton
-from Creacion import Creacion
 
 class Inicio(State):
     def __init__(self):

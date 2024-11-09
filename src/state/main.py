@@ -1,6 +1,6 @@
 import pygame
 from context import Context
-from inicio import Inicio
+from inicio import Inicio   
 
 def main():
     pygame.init() # Inicializa Pygame

@@ -26,7 +26,6 @@ class Jugar(State):
     def handle_events(self, event) -> None:
         self.gestor.handle_events(event, self.caretaker)
 
-
     def draw(self, screen) -> None:
         screen.fill(self.background_color) # Fondo de la pantalla
         screen.blit(self.frase, (100, 50)) # Texto de la pantalla

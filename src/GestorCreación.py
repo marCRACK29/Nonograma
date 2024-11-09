@@ -1,12 +1,11 @@
 import pygame
 from pygame import MOUSEBUTTONDOWN
-
 from src.Proxy import Proxy
 from src.tablero import Tablero
 from src.memento import mementoCreacion
 from src.Color import Color
-class GestorCreacion:
 
+class GestorCreacion:
     def __init__(self, tamañoTablero, tamañoCasilla):
         self.tableroObjetivo = Tablero(tamañoTablero, tamañoCasilla)
 
@@ -27,7 +26,9 @@ class GestorCreacion:
     def draw(self, screen):
         #Metodo para dibujar el tablero en la pantalla
         screen.fill((255, 255, 255))  # Limpia la pantalla con blanco
-        self.tableroObjetivo.dibujar(screen)  # Dibuja el tablero del jugador
+        desfase_x = 150
+        desfase_y = 150
+        self.tableroObjetivo.dibujar(screen, desfase_x, desfase_y)
 
     def handle_events(self, event, caretaker):
         #Manejar eventos de teclado y mouse
