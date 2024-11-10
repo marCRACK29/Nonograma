@@ -23,15 +23,15 @@ def play(tamaño, ruta_nonograma):
     while True:
         PLAY_MOUSE_POS = pygame.mouse.get_pos()
 
-        SCREEN.fill("black")
+        SCREEN.fill("White")
 
         PLAY_TEXT = get_font(45).render("Nonograma", True, "White") # Titulo
         PLAY_RECT = PLAY_TEXT.get_rect(midtop=(640, 100)) # Posicion del titulo
         SCREEN.blit(PLAY_TEXT, PLAY_RECT) # Dibujar el titulo en la pantalla
 
         # A continuación los botones para esta ventana
-        PLAY_BACK = Button(image=None, pos=(640, 460),
-                           text_input="BACK", font=get_font(75), base_color="White", color_flotante="Green")
+        PLAY_BACK = Button(image=None, pos=(1100, 460),
+                           text_input="BACK", font=get_font(75), base_color="Black", color_flotante="Green")
 
         # Cambiar el color del boton si el mouse esta encima
         PLAY_BACK.changeColor(PLAY_MOUSE_POS)

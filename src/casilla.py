@@ -16,22 +16,21 @@ class Casilla:
         pygame.draw.rect(screen, Color.BLACK.value, self.rect)
         pygame.draw.rect(screen, self.color, self.rect.inflate(-2,-2))
 
-    def set_color(self):
-        self.color = Proxy.get_color()
+    def set_color(self, color):
+        self.color = color
 
     def get_color(self):
         return self.color
 
-    def click(self, evento):
+    def click(self, evento, color_seleccionado):
         if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
             # Ajustar la posición del mouse según el desplazamiento
-
             mouse_pos = (
                 evento.pos[0] - 150,  # Desplazamiento_x
                 evento.pos[1] - 150   # Desplazamiento_y
             )
             if self.rect.collidepoint(mouse_pos):
-                self.set_color()
+                self.set_color(color_seleccionado)
                 pygame.event.post(pygame.event.Event(pygame.USEREVENT, {
                 'columna': self.columna,
                 'fila': self.fila,

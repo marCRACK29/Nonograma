@@ -1,9 +1,25 @@
 from pygame import MOUSEBUTTONDOWN
+
+from src.colorbutton import colorbutton
 from src.memento import mementoJuego, mementoCreacion
 from src.tablero import Tablero
 from src.Color import Color
 from src.Proxy import Proxy
 import pygame
+
+color_buttons = [
+    colorbutton(image=pygame.image.load("assets/black.png"), pos=(1100, 50), color=Color.BLACK.value, size=(50, 50)),
+    colorbutton(image=pygame.image.load("assets/blue.png"), pos=(1160, 50), color=Color.BLUE.value, size=(50, 50)),
+    colorbutton(image=pygame.image.load("assets/brown.png"), pos=(1100, 110), color=Color.BROWN.value, size=(50, 50)),
+    colorbutton(image=pygame.image.load("assets/celeste.png"), pos=(1160, 110), color=Color.LIGHT_BLUE.value, size=(50, 50)),
+    colorbutton(image=pygame.image.load("assets/green.png"), pos=(1100, 170), color=Color.GREEN.value, size=(50, 50)),
+    colorbutton(image=pygame.image.load("assets/greenL.png"), pos=(1160, 170), color=Color.LIGHT_GREEN.value, size=(50, 50)),
+    colorbutton(image=pygame.image.load("assets/orange.png"), pos=(1100, 230), color=Color.ORANGE.value, size=(50, 50)),
+    colorbutton(image=pygame.image.load("assets/pink.png"), pos=(1160, 230), color=Color.PINK.value, size=(50, 50)),
+    colorbutton(image=pygame.image.load("assets/purple.png"), pos=(1100, 290), color=Color.PURPLE.value, size=(50, 50)),
+    colorbutton(image=pygame.image.load("assets/red.png"), pos=(1160, 290), color=Color.RED.value, size=(50, 50)),
+    colorbutton(image=pygame.image.load("assets/yellow.png"), pos=(1130, 350), color=Color.YELLOW.value, size=(50, 50)),
+]
 
 class GestorJuego:
 
@@ -108,8 +124,9 @@ class GestorJuego:
         self.numeritosColumnas = numeritosColumnas #Se guarda como valor de la clase
 
     def draw(self, screen):
-        #Metodo para dibujar el tablero en la pantalla
-        screen.fill((255, 255, 255))  # Limpia la pantalla con blanco
+        for boton in color_buttons:
+            boton.draw(screen)
+
         tamañoCasilla = self.tamañoCasilla
         desfase_x = 150
         desfase_y = 150
@@ -143,22 +160,17 @@ class GestorJuego:
         #Manejar eventos de teclado y mouse
         if event.type == MOUSEBUTTONDOWN:
             if event.button == 1:
+                for boton in color_buttons:
+                    if boton.checkForInput(event.pos):
+                        Proxy.set_color(boton.get_color())
+                        break
                 caretaker.añadirMemento()
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_l:
                 caretaker.cargarPartida()
-            elif event.key == pygame.K_1:
-                Proxy.set_color(Color.BLACK)
-            elif event.key == pygame.K_2:
-                Proxy.set_color(Color.WHITE)
-            elif event.key == pygame.K_3:
-                Proxy.set_color(Color.YELLOW)
-            elif event.key == pygame.K_4:
-                Proxy.set_color(Color.PINK)
-            elif event.key == pygame.K_5:
-                Proxy.set_color(Color.BLUE)
 
-        self.tableroJugador.manejar_evento(event)
+        self.tableroJugador.manejar_evento(event, Proxy.get_color())
         if event.type == pygame.USEREVENT:
             self.comprobar(event.fila, event.columna, event.color)
 

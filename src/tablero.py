@@ -20,10 +20,10 @@ class Tablero:
                 pygame.draw.rect(screen, casilla.color, rect_desplazado)
                 pygame.draw.rect(screen, (0, 0, 0), rect_desplazado, 1)
 
-    def manejar_evento(self, evento):
+    def manejar_evento(self, evento, color_seleccionado):
         for fila in self.casillas:
             for casilla in fila:
-                casilla.click(evento)
+                casilla.click(evento, color_seleccionado)
 
     def getCasillas(self):
         return self.casillas

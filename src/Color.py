@@ -1,4 +1,3 @@
-import pygame
 from enum import Enum
 
 class Color(Enum):
@@ -14,3 +13,4 @@ class Color(Enum):
     PINK = (255, 192, 203)
     GRAY = (128, 128, 128)
     LIGHT_BLUE = (173, 216, 230)
+    LIGHT_GREEN = (182, 234, 32)
