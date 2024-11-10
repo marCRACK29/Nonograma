@@ -15,10 +15,10 @@ def get_font(size) -> pygame.font.Font:
     return pygame.font.Font("assets/font.ttf", size)
 
 # Ventana donde se muestra el nonograma
-def play():
-    gestor_juego = GestorJuego(10, 50)
+def play(tamaño, ruta_nonograma):
+    gestor_juego = GestorJuego(tamaño, 50) # Crear un gestor de juego con el tamaño del nonograma seleccionado
     caretaker = Caretaker(gestor_juego)
-    caretaker.cargarObjetivo()
+    caretaker.cargarObjetivo(ruta_nonograma)
 
     while True:
         PLAY_MOUSE_POS = pygame.mouse.get_pos()
@@ -88,9 +88,48 @@ def tutorial():
 
         pygame.display.update()
 
+def elegir_tamaño_creacion():
+    while True:
+        ELEGIR_TAMAÑO_MOUSE_POS = pygame.mouse.get_pos()
+
+        SCREEN.fill("black")
+
+        ELEGIR_TAMAÑO_TEXT = get_font(45).render("Elegir Tamaño", True, "White")
+        ELEGIR_TAMAÑO_RECT = ELEGIR_TAMAÑO_TEXT.get_rect(center=(640, 100))
+        SCREEN.blit(ELEGIR_TAMAÑO_TEXT, ELEGIR_TAMAÑO_RECT)
+
+        TAMAÑO_10 = Button(image=None, pos=(640, 260),
+                           text_input="10 x 10", font=get_font(60), base_color="White", color_flotante="Green")
+        TAMAÑO_15 = Button(image=None, pos=(640, 360),
+                           text_input="15 x 15", font=get_font(60), base_color="White", color_flotante="Green")
+        TAMAÑO_20 = Button(image=None, pos=(640, 460),
+                           text_input="20 x 20", font=get_font(60), base_color="White", color_flotante="Green")
+        ELEGIR_TAMAÑO_BACK = Button(image=None, pos=(640, 560),
+                               text_input="BACK", font=get_font(60), base_color="White", color_flotante="Green")
+
+        for button in [TAMAÑO_10, TAMAÑO_15, TAMAÑO_20, ELEGIR_TAMAÑO_BACK]:
+            button.changeColor(ELEGIR_TAMAÑO_MOUSE_POS)
+            button.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if ELEGIR_TAMAÑO_BACK.checkForInput(ELEGIR_TAMAÑO_MOUSE_POS):
+                    main_menu()
+                if TAMAÑO_10.checkForInput(ELEGIR_TAMAÑO_MOUSE_POS):
+                    creacion(10)
+                if TAMAÑO_15.checkForInput(ELEGIR_TAMAÑO_MOUSE_POS):
+                    creacion(15)
+                if TAMAÑO_20.checkForInput(ELEGIR_TAMAÑO_MOUSE_POS):
+                    creacion(20)
+
+        pygame.display.update()
+
 # Ventana donde el usuario podrá crear su propio nonograma
-def creacion():
-    gestor_creacion = GestorCreacion(10, 50)
+def creacion(tamañoTablero):
+    gestor_creacion = GestorCreacion(tamañoTablero, 50)
     caretaker = Caretaker(gestor_creacion)
 
     while True:
@@ -133,18 +172,25 @@ def catalogo():
 
         SCREEN.fill("black")
 
+
         CATALOGO_TEXT = get_font(45).render("Catalogo", True, "White")
         CATALOGO_RECT = CATALOGO_TEXT.get_rect(center=(640, 100))
         SCREEN.blit(CATALOGO_TEXT, CATALOGO_RECT)
 
-        # A continuación los botones para esta ventana
-        CATALOGO_BACK = Button(image=None, pos=(640, 460),
-                               text_input="BACK", font=get_font(75), base_color="White", color_flotante="Green")
-        CATALOGO_PLAY = Button(image=None, pos=(640, 560),
-                               text_input="JUGAR", font=get_font(75), base_color="White", color_flotante="Green")
+        # Botones para los diferentes tamaños
+        TAMAÑO_10 = Button(image=None, pos=(640, 260),
+                           text_input="10 x 10", font=get_font(60), base_color="White", color_flotante="Green")
+        TAMAÑO_15 = Button(image=None, pos=(640, 360),
+                           text_input="15 x 15", font=get_font(60), base_color="White", color_flotante="Green")
+        TAMAÑO_20 = Button(image=None, pos=(640, 460),
+                           text_input="20 x 20", font=get_font(60), base_color="White", color_flotante="Green")
+        CATALOGO_BACK = Button(image=None, pos=(640, 560),
+                               text_input="BACK", font=get_font(60), base_color="White", color_flotante="Green")
+        #CATALOGO_PLAY = Button(image=None, pos=(640, 560),
+                              # text_input="JUGAR", font=get_font(75), base_color="White", color_flotante="Green")
 
         # Cambiar el color del boton si el mouse esta encima
-        for button in [CATALOGO_BACK, CATALOGO_PLAY]:
+        for button in [TAMAÑO_10, TAMAÑO_15, TAMAÑO_20, CATALOGO_BACK]:
             button.changeColor(CATALOGO_MOUSE_POS)
             button.update(SCREEN)
 
@@ -156,10 +202,71 @@ def catalogo():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if CATALOGO_BACK.checkForInput(CATALOGO_MOUSE_POS):
                     main_menu()
-                if CATALOGO_PLAY.checkForInput(CATALOGO_MOUSE_POS):
-                    play()
+                #if CATALOGO_PLAY.checkForInput(CATALOGO_MOUSE_POS):
+                    #play()
+                if TAMAÑO_10.checkForInput(CATALOGO_MOUSE_POS):
+                    mostrar_nonogramas("10x10")
+                if TAMAÑO_15.checkForInput(CATALOGO_MOUSE_POS):
+                    mostrar_nonogramas("15x15")
+                if TAMAÑO_20.checkForInput(CATALOGO_MOUSE_POS):
+                    mostrar_nonogramas("20x20")
         pygame.display.update()
 
+def mostrar_nonogramas(tamaño):
+    import os
+    tamaño_int = int(tamaño.split('x')[0]) #Se extrae el tamaño del nonograma
+    # Ruta al directorio de catálogo para el tamaño seleccionado
+    ruta_catalogo = os.path.join("catalogo", tamaño)
+
+    # Obtener lista de nonogramas disponibles
+    try:
+        nonogramas = [f for f in os.listdir(ruta_catalogo) if f.endswith('.pkl')]
+    except FileNotFoundError:
+        nonogramas = []
+
+    while True:
+        SCREEN.fill("black")
+
+        # Título
+        TITULO = get_font(45).render(f"Nonogramas {tamaño}", True, "White")
+        TITULO_RECT = TITULO.get_rect(center=(640, 50))
+        SCREEN.blit(TITULO, TITULO_RECT)
+
+        # Mostrar lista de nonogramas
+        y_pos = 150
+        botones_nonogramas = []
+        for nonograma in nonogramas:
+            nombre = nonograma.replace('.pkl', '')
+            boton = Button(image=None, pos=(640, y_pos),
+                           text_input=nombre, font=get_font(35),
+                           base_color="White", color_flotante="Green")
+            botones_nonogramas.append(boton)
+            y_pos += 60
+
+        BACK = Button(image=None, pos=(640, 660),
+                      text_input="BACK", font=get_font(75),
+                      base_color="White", color_flotante="Green")
+
+        MOUSE_POS = pygame.mouse.get_pos()
+
+        for boton in botones_nonogramas + [BACK]:
+            boton.changeColor(MOUSE_POS)
+            boton.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if BACK.checkForInput(MOUSE_POS):
+                    catalogo()
+                for i, boton in enumerate(botones_nonogramas):
+                    if boton.checkForInput(MOUSE_POS):
+                        # Aquí cargarías el nonograma seleccionado
+                        ruta_nonograma = os.path.join(ruta_catalogo, nonogramas[i])
+                        play(tamaño_int, ruta_nonograma)
+
+        pygame.display.update()
 # Ventana principal del menú, la primera en mostrarse
 def main_menu():
     while True:
@@ -198,7 +305,7 @@ def main_menu():
                 if TUTORIAL_BUTTON.checkForInput(MENU_MOUSE_POS):
                     tutorial()
                 if CREACION_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    creacion()
+                    elegir_tamaño_creacion()
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                     pygame.quit()
                     sys.exit()
