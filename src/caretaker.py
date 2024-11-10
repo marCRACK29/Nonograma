@@ -71,9 +71,8 @@ class Caretaker:
             self.gestor.cargar_estado(m)
 
     #metodo que permite cargar un nonograma Objetivo para poder jugar
-    def cargarObjetivo(self):
+    def cargarObjetivo(self, ruta_cargado):
         try:
-            ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion","nonogramaUsuarioCreacion.pkl")
             print(f"Intentando cargar desde: {ruta_cargado}")
 
             with open(ruta_cargado, "rb") as archivo:
