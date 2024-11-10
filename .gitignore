@@ -1,3 +1,5 @@
 ./idea
 **/__pycache__/
 src/state/
+.idea/misc.xml
+.idea/nonograma.iml
