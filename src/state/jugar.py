@@ -2,6 +2,7 @@ import pygame
 from state import State
 from src.GestorJuego import GestorJuego
 from src.caretaker import Caretaker
+from src.vidas import HP_counter
 
 class Jugar(State):
     def __init__(self):
@@ -13,6 +14,12 @@ class Jugar(State):
         self.img_uno = self.load_image('der.png')
 
         self.gestor = GestorJuego(10, 50)
+        if True:#TODO: reemplazar por logica de "si se va a jugar con vidas"
+            vidas = HP_counter(3,4,(900,30))
+            vidas.setHeartImage(self.load_image("heart.png"))
+            vidas.setNoheartImage(self.load_image("noHeart.png"))
+            self.gestor.contadorVidas = vidas
+
         self.caretaker = Caretaker(self.gestor)
         self.caretaker.cargarObjetivo()
 
@@ -25,6 +32,8 @@ class Jugar(State):
 
     def handle_events(self, event) -> None:
         self.gestor.handle_events(event, self.caretaker)
+        if not self.gestor.contadorVidas.alive():
+            self.go_to()
 
 
     def draw(self, screen) -> None:
