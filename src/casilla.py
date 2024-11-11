@@ -23,7 +23,7 @@ class Casilla:
         return self.color
 
     def click(self, evento, color_seleccionado):
-        if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
+        if evento.type == pygame.MOUSEBUTTONDOWN and evento.button in [1, 3]:
             # Ajustar la posición del mouse según el desplazamiento
             mouse_pos = (
                 evento.pos[0] - 150,  # Desplazamiento_x

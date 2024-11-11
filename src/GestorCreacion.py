@@ -56,4 +56,7 @@ class GestorCreacion:
                         Proxy.set_color(boton.get_color())
                         break
                 caretaker.añadirMemento()
-        self.tableroObjetivo.manejar_evento(event, Proxy.get_color())
+                self.tableroObjetivo.manejar_evento(event, Proxy.get_color())
+            elif event.button == 3:  # Click derecho
+                self.tableroObjetivo.manejar_evento(event, Color.WHITE.value)
+                caretaker.añadirMemento()
