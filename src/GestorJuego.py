@@ -1,3 +1,5 @@
+import math
+
 from pygame import MOUSEBUTTONDOWN
 
 from src.colorbutton import colorbutton
@@ -23,13 +25,13 @@ color_buttons = [
 
 class GestorJuego:
 
-    def __init__(self, tamañoTablero, tamañoCasilla):
+    def __init__(self, tamañoTablero):
         self.numeritosFilas = []
         self.numeritosColumnas = []
         self.tamañoTablero = tamañoTablero
-        self.tamañoCasilla = tamañoCasilla
-        self.tableroObjetivo = Tablero(tamañoTablero, tamañoCasilla)
-        self.tableroJugador = Tablero(tamañoTablero, tamañoCasilla)
+        self.tamañoCasilla = math.floor((-25*tamañoTablero)/10 + 75)
+        self.tableroObjetivo = Tablero(tamañoTablero, self.tamañoCasilla )
+        self.tableroJugador = Tablero(tamañoTablero, self.tamañoCasilla)
 
     def guardar_estado(self):
         m = mementoJuego(self.tableroJugador, self.tableroObjetivo)

@@ -23,7 +23,7 @@ class Caretaker:
 
             # Usar el nombre de la clase directamente
             if gestor_type == "GestorCreacion":
-                ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "nonogramaUsuarioCreacion.pkl")
+                ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "penguin.pkl")
             elif gestor_type == "GestorJuego":
                 ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "partida.pkl")
             else:
