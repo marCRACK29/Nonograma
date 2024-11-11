@@ -5,9 +5,10 @@ def test_createHealthCounter():
     assert hp.maxLives == 3
     assert hp.lives == 3
     assert hp.scale == 50
-    assert hp.pos.x == 100
-    assert hp.pos.y == 200
-    assert hp.alive()
+    assert hp.pos[0] == 100
+    assert hp.pos[1] == 200
+
+
 def test_healthCounter():
     hp = HP_counter(4,30,(50,50))
     assert hp.lives == hp.maxLives
@@ -17,8 +18,6 @@ def test_healthCounter():
     hp.loseLife()
     hp.loseLife()
     hp.loseLife()
-    assert not hp.alive()
-    
-
+    assert hp.alive()==False
 
 
