@@ -30,6 +30,7 @@ class GestorJuego:
         self.tamañoCasilla = tamañoCasilla
         self.tableroObjetivo = Tablero(tamañoTablero, tamañoCasilla)
         self.tableroJugador = Tablero(tamañoTablero, tamañoCasilla)
+        self.contadorVidas = None #contador de vidas se setea externamente si se va a jugar con vidas
 
     def guardar_estado(self):
         m = mementoJuego(self.tableroJugador, self.tableroObjetivo)
@@ -72,6 +73,8 @@ class GestorJuego:
             print ("Correcto") #print de prueba
         else :
             print ("Incorrecto") #print de prueba
+            if self.contadorVidas is not None:
+                self.contadorVidas.loseLife()
 
     #Metodo para determinar pistas numéricas paras las filas dado un nonograma Objetivo
     def pistasFilas(self):
@@ -155,6 +158,8 @@ class GestorJuego:
                 x_pos -= 20  # Movemos hacia la izquierda para la siguiente pista
 
         self.tableroJugador.dibujar(screen, desfase_x, desfase_y)  # Dibuja el tablero del jugador
+        if self.contadorVidas is not None:
+            self.contadorVidas.draw(screen)
 
     def handle_events(self, event, caretaker):
         #Manejar eventos de teclado y mouse
@@ -173,6 +178,7 @@ class GestorJuego:
         self.tableroJugador.manejar_evento(event, Proxy.get_color())
         if event.type == pygame.USEREVENT:
             self.comprobar(event.fila, event.columna, event.color)
+
 
 """
 def main():
