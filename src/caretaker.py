@@ -10,11 +10,36 @@ class Caretaker:
         self.gestor = gestor
         self.mementos = []
         self.ruta_guardado = None
+        self.undo_stack = []
+        self.redo_stack = []
+
+        self.añadirMemento()
+
+    def deshacer(self):
+        if len(self.undo_stack) > 1:
+            # Guardar el estado actual en la pila de rehacer
+            self.redo_stack.append(self.gestor.guardar_estado())
+            # Cargar el último memento
+            m = self.undo_stack.pop()
+            self.gestor.cargar_estado(m)
+        else:
+            print("No hay más estados para deshacer")
+
+    def rehacer(self):
+        if self.redo_stack:
+            # Guardar el estado actual en la pila de deshacer
+            self.undo_stack.append(self.gestor.guardar_estado())
+            # Cargar el último memento de rehacer
+            m = self.redo_stack.pop()
+            self.gestor.cargar_estado(m)
+
 
     def añadirMemento(self):
         m = self.gestor.guardar_estado()
-        self.mementos.append(m)
-        self.guardar()
+        self.mementos.append(m)  #Se agrega memento al stack de mementos
+        self.undo_stack.append(m) #Se agrega memento al stack de undo
+        self.redo_stack.clear()
+        self.guardar() #Se guarda el memento en memoria
 
     #Metodo para guardar la partida en curso en memoria
     def guardar(self):
@@ -23,7 +48,7 @@ class Caretaker:
 
             # Usar el nombre de la clase directamente
             if gestor_type == "GestorCreacion":
-                ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "nonogramaUsuarioCreacion.pkl")
+                ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "penguin.pkl")
             elif gestor_type == "GestorJuego":
                 ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "partida.pkl")
             else:
@@ -31,8 +56,7 @@ class Caretaker:
                 return
 
             with open(ruta_guardado, "wb") as archivo:
-                m = self.gestor.guardar_estado()
-                pickle.dump(m, archivo)
+                pickle.dump(self.mementos[-1], archivo)
 
         except Exception as e:
             print(f"Error al guardar: {str(e)}")

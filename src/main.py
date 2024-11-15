@@ -16,7 +16,7 @@ def get_font(size) -> pygame.font.Font:
 
 # Ventana donde se muestra el nonograma
 def play(tamaño, ruta_nonograma):
-    gestor_juego = GestorJuego(tamaño, 50) # Crear un gestor de juego con el tamaño del nonograma seleccionado
+    gestor_juego = GestorJuego(tamaño) # Crear un gestor de juego con el tamaño del nonograma seleccionado
     caretaker = Caretaker(gestor_juego)
     caretaker.cargarObjetivo(ruta_nonograma)
 
@@ -129,23 +129,23 @@ def elegir_tamaño_creacion():
 
 # Ventana donde el usuario podrá crear su propio nonograma
 def creacion(tamañoTablero):
-    gestor_creacion = GestorCreacion(tamañoTablero, 50)
+    gestor_creacion = GestorCreacion(tamañoTablero)
     caretaker = Caretaker(gestor_creacion)
 
     while True:
         CREACION_MOUSE_POS = pygame.mouse.get_pos()
 
-        SCREEN.fill("black")
+        SCREEN.fill("White")
 
         CREACION_TEXT = get_font(45).render("Creacion", True, "White")
         CREACION_RECT = CREACION_TEXT.get_rect(midtop=(640, 100))
         SCREEN.blit(CREACION_TEXT, CREACION_RECT)
 
-        CREACION_BACK = Button(image=None, pos=(640, 460),
-                           text_input="BACK", font=get_font(75), base_color="White", color_flotante="Green")
+        CREACION_BACK = Button(image=None, pos=(1100, 560),
+                           text_input="BACK", font=get_font(75), base_color="Black", color_flotante="Green")
 
-        CREACION_GUARDAR = Button(image=None, pos=(640, 560),
-                           text_input="GUARDAR", font=get_font(75), base_color="White", color_flotante="Green")
+        CREACION_GUARDAR = Button(image=None, pos=(1100, 660),
+                           text_input="GUARDAR", font=get_font(75), base_color="Black", color_flotante="Green")
 
         for button in [CREACION_BACK, CREACION_GUARDAR]:
             button.changeColor(CREACION_MOUSE_POS)
