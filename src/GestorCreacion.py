@@ -1,5 +1,8 @@
 import pygame
+from orca.input_event import KEYBOARD_EVENT
 from pygame import MOUSEBUTTONDOWN
+from pygame.constants import USEREVENT
+
 from src.Proxy import Proxy
 from src.tablero import Tablero
 from src.memento import mementoCreacion
@@ -20,6 +23,7 @@ color_buttons = [
     colorbutton(image=pygame.image.load("assets/red.png"), pos=(1160, 290), color=Color.RED.value, size=(50, 50)),
     colorbutton(image=pygame.image.load("assets/yellow.png"), pos=(1130, 350), color=Color.YELLOW.value, size=(50, 50)),
 ]
+#undo_button = colorbutton(image=pygame.image.load("assets/deshacer.png"), pos=(1100, 450), color=None, size=(100, 100))
 class GestorCreacion:
     def __init__(self, tamañoTablero):
         self.tableroObjetivo = Tablero(tamañoTablero, math.floor((-25*tamañoTablero)/10 + 75))
@@ -41,6 +45,7 @@ class GestorCreacion:
     def draw(self, screen):
         for boton in color_buttons:
             boton.draw(screen)
+        #undo_button.draw(screen)
         #Metodo para dibujar el tablero en la pantalla
         #screen.fill((255, 255, 255))  # Limpia la pantalla con blanco
         desfase_x = 150
@@ -55,8 +60,15 @@ class GestorCreacion:
                     if boton.checkForInput(event.pos):
                         Proxy.set_color(boton.get_color())
                         break
+                #if undo_button.checkForInput(event.pos):
+                    #caretaker.deshacer()
                 caretaker.añadirMemento()
                 self.tableroObjetivo.manejar_evento(event, Proxy.get_color())
             elif event.button == 3:  # Click derecho
-                self.tableroObjetivo.manejar_evento(event, Color.WHITE.value)
                 caretaker.añadirMemento()
+                self.tableroObjetivo.manejar_evento(event, Color.WHITE.value)
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_d:
+                caretaker.deshacer()
+            elif event.key == pygame.K_r:
+                caretaker.rehacer()

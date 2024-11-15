@@ -168,12 +168,15 @@ class GestorJuego:
                         break
                 caretaker.añadirMemento()
                 self.tableroJugador.manejar_evento(event, Proxy.get_color())
+
             elif event.button == 3:  # Click derecho
-                self.tableroJugador.manejar_evento(event, Color.WHITE.value)
                 caretaker.añadirMemento()
+                self.tableroJugador.manejar_evento(event, Color.WHITE.value)
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_l:
-                caretaker.cargarPartida()
+            if event.key == pygame.K_d:
+                caretaker.deshacer()
+            elif event.key == pygame.K_r:
+                caretaker.rehacer()
 
         if event.type == pygame.USEREVENT:
             self.comprobar(event.fila, event.columna, event.color)

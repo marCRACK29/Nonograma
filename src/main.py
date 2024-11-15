@@ -141,10 +141,10 @@ def creacion(tamañoTablero):
         CREACION_RECT = CREACION_TEXT.get_rect(midtop=(640, 100))
         SCREEN.blit(CREACION_TEXT, CREACION_RECT)
 
-        CREACION_BACK = Button(image=None, pos=(1100, 460),
+        CREACION_BACK = Button(image=None, pos=(1100, 560),
                            text_input="BACK", font=get_font(75), base_color="Black", color_flotante="Green")
 
-        CREACION_GUARDAR = Button(image=None, pos=(1100, 560),
+        CREACION_GUARDAR = Button(image=None, pos=(1100, 660),
                            text_input="GUARDAR", font=get_font(75), base_color="Black", color_flotante="Green")
 
         for button in [CREACION_BACK, CREACION_GUARDAR]:
