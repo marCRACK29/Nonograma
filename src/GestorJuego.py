@@ -60,11 +60,11 @@ class GestorJuego:
     def ayuda(self):
         for i in range(self.tamañoTablero):
             for j in range(self.tamañoTablero):
-                C1 = self.tableroObjetivo.getCasillas()[i][j].get_color()
-                C2 =self.tableroJugador.getCasillas()[i][j].get_color()
-                if (C1 != Color.WHITE.value and C2 == Color.WHITE.value):
-                    self.tableroJugador.getCasillas()[i][j].set_color(C1)
-                    break
+                color_objetivo = self.tableroObjetivo.getCasillas()[i][j].get_color()
+                color_jugador = self.tableroJugador.getCasillas()[i][j].get_color()
+                if color_objetivo != Color.WHITE.value and color_jugador == Color.WHITE.value:
+                    self.tableroJugador.getCasillas()[i][j].set_color(color_objetivo)
+                    return
 
     #Metodo que verifica que la última casilla pintada haya sido correcta
     def comprobar(self, i, j, color):
@@ -177,6 +177,8 @@ class GestorJuego:
                 caretaker.deshacer()
             elif event.key == pygame.K_r:
                 caretaker.rehacer()
+            elif event.key == pygame.K_a:
+                self.ayuda()
 
         if event.type == pygame.USEREVENT:
             self.comprobar(event.fila, event.columna, event.color)

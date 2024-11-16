@@ -93,6 +93,11 @@ class Caretaker:
         with open(ruta_cargado, "rb") as archivo:
             m = pickle.load(archivo)
             self.gestor.cargar_estado(m)
+    #Metodo que permite guardar en catalogo el nonograma creado por usuario
+    def añadir_a_catalogo(self, tamaño, nombre):
+        return
+
+
 
     #metodo que permite cargar un nonograma Objetivo para poder jugar
     def cargarObjetivo(self, ruta_cargado):
