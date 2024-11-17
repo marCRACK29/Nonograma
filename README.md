@@ -3,6 +3,5 @@
 
 ## Integrantes: 
 - **Gabriel Castillo Castillo**
-- **Diego Urbano**
-- **Felicia Pino**
 - **Marcos Martínez Rojas**
+- **Felicia Pino**
