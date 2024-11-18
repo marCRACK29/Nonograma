@@ -51,6 +51,9 @@ def continuar_partida():
         if not gestor_juego.contadorVidas.alive():
             caretaker.borrarPartida()
             main_menu()
+        if gestor_juego.nonogramaFinalizado():
+            caretaker.borrarPartida()
+            win()
 
         gestor_juego.draw(SCREEN)
         pygame.display.update() #
@@ -98,9 +101,38 @@ def play(tamaño, ruta_nonograma):
         if not gestor_juego.contadorVidas.alive():
             caretaker.borrarPartida()
             main_menu()
+        if gestor_juego.nonogramaFinalizado():
+            caretaker.borrarPartida()
+            win()
 
         gestor_juego.draw(SCREEN)
         pygame.display.update() #
+def win():
+    while True:
+        WIN_MOUSE_POS = pygame.mouse.get_pos()
+
+        SCREEN.fill("black")
+
+        WIN_TEXT = get_font(45).render("Ganaste", True, "White")
+        WIN_RECT = WIN_TEXT.get_rect(center=(640, 100))
+        SCREEN.blit(WIN_TEXT, WIN_RECT)
+
+        WIN_BACK = Button(image=None, pos=(640, 460),
+                           text_input="BACK", font=get_font(75), base_color="White", color_flotante="Green")
+
+        for button in [WIN_BACK]:
+            button.changeColor(WIN_MOUSE_POS)
+            button.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if WIN_BACK.checkForInput(WIN_MOUSE_POS):
+                    main_menu()
+
+        pygame.display.update()
 
 # Ventana donde se muestra el tutorial
 def tutorial():

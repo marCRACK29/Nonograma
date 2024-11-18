@@ -35,6 +35,15 @@ class GestorJuego:
         self.contadorVidas = None #contador de vidas se setea externamente si se va a jugar con vidas, es un HP_counter
         self.numVidas = None #numero de vidas iniciales, es un entero
 
+    def nonogramaFinalizado(self):
+        for i in range(self.tamañoTablero):
+            for j in range(self.tamañoTablero):
+                color_objetivo = self.tableroObjetivo.getCasillas()[i][j].get_color()
+                color_jugador = self.tableroJugador.getCasillas()[i][j].get_color()
+                if color_objetivo != color_jugador:
+                    return False
+        return True
+
 
     def guardar_estado(self):
         m = mementoJuego(self.tableroJugador, self.tableroObjetivo, self.contadorVidas.lives)
