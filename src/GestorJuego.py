@@ -32,11 +32,12 @@ class GestorJuego:
         self.tamañoCasilla = math.floor((-25*tamañoTablero)/10 + 75)
         self.tableroObjetivo = Tablero(tamañoTablero, self.tamañoCasilla )
         self.tableroJugador = Tablero(tamañoTablero, self.tamañoCasilla)
-        self.contadorVidas = None #contador de vidas se setea externamente si se va a jugar con vidas
+        self.contadorVidas = None #contador de vidas se setea externamente si se va a jugar con vidas, es un HP_counter
+        self.numVidas = None #numero de vidas iniciales, es un entero
 
 
     def guardar_estado(self):
-        m = mementoJuego(self.tableroJugador, self.tableroObjetivo)
+        m = mementoJuego(self.tableroJugador, self.tableroObjetivo, self.contadorVidas.lives)
         #print("Creando mementoJuego")
         return m
 

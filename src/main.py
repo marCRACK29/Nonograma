@@ -48,6 +48,10 @@ def continuar_partida():
                 if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
                     main_menu()
                 # Dibujar el tablero de juego en la pantalla
+        if not gestor_juego.contadorVidas.alive():
+            caretaker.borrarPartida()
+            main_menu()
+
         gestor_juego.draw(SCREEN)
         pygame.display.update() #
 
@@ -55,8 +59,10 @@ def continuar_partida():
 def play(tamaño, ruta_nonograma):
     gestor_juego = GestorJuego(tamaño) # Crear un gestor de juego con el tamaño del nonograma seleccionado
     if True:  # TODO: reemplazar por logica de "si se va a jugar con vidas"
-        vidas = HP_counter(3, 4, (900, 30))
+        cantidad_vidas = 3
+        vidas = HP_counter(cantidad_vidas)
         gestor_juego.contadorVidas = vidas
+        gestor_juego.numVidas = vidas.lives
     caretaker = Caretaker(gestor_juego)
     caretaker.cargarObjetivo(ruta_nonograma)
 
@@ -89,6 +95,10 @@ def play(tamaño, ruta_nonograma):
                 if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
                     main_menu()
                 # Dibujar el tablero de juego en la pantalla
+        if not gestor_juego.contadorVidas.alive():
+            caretaker.borrarPartida()
+            main_menu()
+
         gestor_juego.draw(SCREEN)
         pygame.display.update() #
 

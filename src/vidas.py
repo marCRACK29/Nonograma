@@ -8,10 +8,10 @@ import os
 
 class HP_counter:
 
-    def __init__(self, maxLives, scale, position):
+    def __init__(self, maxLives):
         self.maxLives = maxLives
-        self.scale = scale
-        self.pos = position
+        self.scale = 4
+        self.pos = (900,30)
         self.lives = maxLives
         self.heartImage = pygame.image.load(os.path.join("assets", "heart.png"))
         self.noheartImage = pygame.image.load(os.path.join("assets", "noHeart.png"))
@@ -20,16 +20,17 @@ class HP_counter:
         if self.lives <= 0: self.lives = 0
     def alive(self): return  self.lives > 0
 
-    def setHeartImage(self, image):
-        self.heartImage = pygame.transform.scale(image,(image.get_width()*self.scale,image.get_height()*self.scale))
-    def setNoheartImage(self, image):
-        self.noheartImage = pygame.transform.scale(image,(image.get_width()*self.scale,image.get_height()*self.scale))
+    #def setHeartImage(self, image):
+        #self.heartImage = pygame.transform.scale(image,(image.get_width()*self.scale,image.get_height()*self.scale))
+    #def setNoheartImage(self, image):
+        #self.noheartImage = pygame.transform.scale(image,(image.get_width()*self.scale,image.get_height()*self.scale))
 
     def draw(self, surface) -> None:
         imageToDraw = self.heartImage #the image that we will draw will depend on how many hearts there are left
         for i in range(self.maxLives):
             if i==self.lives: imageToDraw = self.noheartImage
             surface.blit(imageToDraw, (self.pos[0] + imageToDraw.get_width()*i, self.pos[1]))
+
 """
 def main():
     pygame.init()
