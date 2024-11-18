@@ -15,6 +15,12 @@ class Text_box():
         self.manager = pygame_gui.UIManager((screen.width,screen.height))
         self._textBox = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect(xy,wh),manager=self.manager)
         self.clock = pygame.time.Clock()
+        # Crear un botón para guardar el texto
+        self.save_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(xy[0] + wh[0] + 10, xy[1], 100, 50),
+            text='Guardar',
+            manager=self.manager
+        )
     def setText(self,value):
         self._textBox.set_text(value)
     def getText(self):
@@ -25,7 +31,17 @@ class Text_box():
         self.manager.update(self.clock.tick()/1000.0)
         self.manager.draw_ui(self.screen)
 
+    def check_button(self):
+        """Verifica si se presiona el botón de guardar."""
+        for event in pygame.event.get():
+            if event.type == pygame_gui.UI_BUTTON_PRESSED:
+                if event.ui_element == self.save_button:
+                    self.texto_guardado = self.getText()  # Almacena el texto ingresado
+                    print(f"Texto guardado: {self.texto_guardado}")  # Imprime el texto guardado
+                    return True  # Indica que se debe cerrar la ventana
+        return False  # No se debe cerrar la ventana
 
+""""
 def main():
     pygame.init()
     screen = pygame.display.set_mode((800, 600))
@@ -40,7 +56,9 @@ def main():
                 pygame.quit()
                 return
             entrada.process_events(event) #<---
-
+        if entrada.check_button():  # Verifica si se presionó Enter o el botón
+            pygame.quit()  # Cierra la ventana
+            return
         screen.fill("blue")
 
         entrada.draw() #<---
@@ -52,3 +70,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+"""""

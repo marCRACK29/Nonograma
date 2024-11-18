@@ -32,21 +32,36 @@ class GestorJuego:
         self.tamañoCasilla = math.floor((-25*tamañoTablero)/10 + 75)
         self.tableroObjetivo = Tablero(tamañoTablero, self.tamañoCasilla )
         self.tableroJugador = Tablero(tamañoTablero, self.tamañoCasilla)
-        self.contadorVidas = None #contador de vidas se setea externamente si se va a jugar con vidas
+        self.contadorVidas = None #contador de vidas se setea externamente si se va a jugar con vidas, es un HP_counter
+        self.numVidas = None #numero de vidas iniciales, es un entero
+
+    def nonogramaFinalizado(self):
+        for i in range(self.tamañoTablero):
+            for j in range(self.tamañoTablero):
+                color_objetivo = self.tableroObjetivo.getCasillas()[i][j].get_color()
+                color_jugador = self.tableroJugador.getCasillas()[i][j].get_color()
+                if color_objetivo != color_jugador:
+                    return False
+        return True
 
 
     def guardar_estado(self):
-        m = mementoJuego(self.tableroJugador, self.tableroObjetivo)
+        m = mementoJuego(self.tableroJugador, self.tableroObjetivo, self.contadorVidas.lives)
         #print("Creando mementoJuego")
         return m
 
     def cargar_estado(self, memento):
         tableros_cargados = memento.get_state()
         if isinstance(tableros_cargados, tuple):
-            self.tableroJugador, self.tableroObjetivo = tableros_cargados
+            self.tableroJugador = tableros_cargados[0]  # Si es una tupla, tomar el primer elemento
+            self.tableroObjetivo = tableros_cargados[1]  # Si es una tupla, tomar el segundo elemento
         else:
-            self.tableroJugador = tableros_cargados
+            self.tableroJugador = tableros_cargados[0]
+            self.tableroObjetivo = tableros_cargados[1]
         print("Cargado")
+        self.tamañoTablero = self.tableroObjetivo.tamaño
+        self.tamañoCasilla = self.tableroJugador.tamañoCasilla
+
 
     #Metodo que permite cargar un tablero objetivo usando un mementoCreacion
     def cargar_objetivo(self, memento):
@@ -62,11 +77,11 @@ class GestorJuego:
     def ayuda(self):
         for i in range(self.tamañoTablero):
             for j in range(self.tamañoTablero):
-                C1 = self.tableroObjetivo.getCasillas()[i][j].get_color()
-                C2 =self.tableroJugador.getCasillas()[i][j].get_color()
-                if (C1 != Color.WHITE.value and C2 == Color.WHITE.value):
-                    self.tableroJugador.getCasillas()[i][j].set_color(C1)
-                    break
+                color_objetivo = self.tableroObjetivo.getCasillas()[i][j].get_color()
+                color_jugador = self.tableroJugador.getCasillas()[i][j].get_color()
+                if color_objetivo != Color.WHITE.value and color_jugador == Color.WHITE.value:
+                    self.tableroJugador.getCasillas()[i][j].set_color(color_objetivo)
+                    return
 
     #Metodo que verifica que la última casilla pintada haya sido correcta
     def comprobar(self, i, j, color):
@@ -183,6 +198,10 @@ class GestorJuego:
                 caretaker.deshacer()
             elif event.key == pygame.K_r:
                 caretaker.rehacer()
+            elif event.key == pygame.K_a:
+                self.ayuda()
+            elif event.key == pygame.K_l:
+                caretaker.cargarPartida()
 
         if event.type == pygame.USEREVENT:
             self.comprobar(event.fila, event.columna, event.color)

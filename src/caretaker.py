@@ -3,6 +3,7 @@ import pickle
 
 from src.GestorCreacion import GestorCreacion
 from src.GestorJuego import GestorJuego
+from src.vidas import HP_counter
 
 
 class Caretaker:
@@ -12,8 +13,6 @@ class Caretaker:
         self.ruta_guardado = None
         self.undo_stack = []
         self.redo_stack = []
-
-        self.añadirMemento()
 
     def deshacer(self):
         if len(self.undo_stack) > 1:
@@ -33,6 +32,16 @@ class Caretaker:
             m = self.redo_stack.pop()
             self.gestor.cargar_estado(m)
 
+    def borrarPartida(self):
+        try:
+            ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "hola.pkl")
+            if os.path.exists(ruta_guardado):
+                os.remove(ruta_guardado)
+                print("Partida guardada eliminada con éxito.")
+            else:
+                print("No se encontró ninguna partida guardada para eliminar.")
+        except Exception as e:
+            print(f"Error al intentar borrar la partida: {str(e)}")
 
     def añadirMemento(self):
         m = self.gestor.guardar_estado()
@@ -50,7 +59,7 @@ class Caretaker:
             if gestor_type == "GestorCreacion":
                 ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "penguin.pkl")
             elif gestor_type == "GestorJuego":
-                ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "partida.pkl")
+                ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "hola.pkl")
             else:
                 print(f"Tipo de gestor no reconocido: {gestor_type}")
                 return
@@ -71,28 +80,53 @@ class Caretaker:
 
             if gestor_type == "GestorCreacion":
                 print("Cargando desde GestorCreacion")
-                ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "nonogramaUsuarioCreacion.pkl")
-                print("Se carga creacion")
+                ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "penguin.pkl")
             elif gestor_type == "GestorJuego":
                 print("Cargando desde GestorJuego")
-                ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorJuego", "nonogramaUsuarioJuego.pkl")
-                print("Se carga juego")
+                ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "hola.pkl")
             else:
                 print(f"Tipo de gestor no reconocido al cargar: {gestor_type}")
                 return
 
             with open(ruta_cargado, "rb") as archivo:
                 m = pickle.load(archivo)
+                print(f"Memento cargado: {m}")  # Verifica el contenido del memento
                 self.gestor.cargar_estado(m)
 
+            if gestor_type == "GestorJuego":
+                print("Cargando pistas del juego")
+                print(f"Vidas: {m.get_state()[2]}")
+                vidas = HP_counter(m.get_state()[2])
+                self.gestor.contadorVidas = vidas
+                self.gestor.numVidas = vidas.lives
+                self.gestor.pistasFilas()
+                self.gestor.pistasColumnas()
+                m = self.gestor.guardar_estado()
+                self.mementos.append(m)  # Se agrega memento al stack de mementos
+                self.undo_stack.append(m)  # Se agrega memento al stack de undo
+                self.redo_stack.clear()
+
+        except FileNotFoundError:
+            print("¡ERROR! El archivo de guardado no se encontró.")
         except Exception as e:
             print(f"Error al cargar: {str(e)}")
             import traceback
             traceback.print_exc()
 
-        with open(ruta_cargado, "rb") as archivo:
-            m = pickle.load(archivo)
-            self.gestor.cargar_estado(m)
+    #Metodo que permite guardar en catalogo el nonograma creado por usuario
+    def añadir_en_catalogo(self, tamaño, nombre):
+        carpeta = ""
+        if(tamaño == 10):
+            carpeta = "10x10"
+        elif(tamaño == 15):
+            carpeta = "15x15"
+        elif(tamaño == 20):
+            carpeta = "20x20"
+        ruta_catalogo = os.path.join(os.path.dirname(__file__), "catalogo", carpeta, nombre + ".pkl")
+        self.gestor.guardar_estado()
+        with open(ruta_catalogo, "wb") as archivo:
+            pickle.dump(self.mementos[-1], archivo)
+
 
     #metodo que permite cargar un nonograma Objetivo para poder jugar
     def cargarObjetivo(self, ruta_cargado):
@@ -102,6 +136,10 @@ class Caretaker:
             with open(ruta_cargado, "rb") as archivo:
                 m = pickle.load(archivo)
                 self.gestor.cargar_objetivo(m)
+                m = self.gestor.guardar_estado()
+                self.mementos.append(m)  # Se agrega memento al stack de mementos
+                self.undo_stack.append(m)  # Se agrega memento al stack de undo
+                self.redo_stack.clear()
 
         except Exception as e:
             print(f"\n¡ERROR al cargar objetivo!: {str(e)}")
