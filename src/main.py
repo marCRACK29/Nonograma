@@ -4,6 +4,7 @@ from GestorJuego import GestorJuego
 from GestorCreacion import GestorCreacion
 from caretaker import Caretaker
 from vidas import HP_counter
+from text_box import Text_box
 pygame.init()
 
 SCREEN = pygame.display.set_mode((1280, 720))
@@ -244,6 +245,11 @@ def creacion(tamañoTablero):
                 if CREACION_BACK.checkForInput(CREACION_MOUSE_POS):
                     main_menu()
                 # Poner un condicional de que pasaria si se presiona el boton de guardar
+                if CREACION_GUARDAR.checkForInput(CREACION_MOUSE_POS):
+                    gestor_creacion.text_box = Text_box(SCREEN)
+
+            if gestor_creacion.estado == True:
+                main_menu()
         gestor_creacion.draw(SCREEN)
         pygame.display.update()
 

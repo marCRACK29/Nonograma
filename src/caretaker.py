@@ -114,8 +114,19 @@ class Caretaker:
             traceback.print_exc()
 
     #Metodo que permite guardar en catalogo el nonograma creado por usuario
-    def añadir_a_catalogo(self, tamaño, nombre):
-        return
+    def añadir_en_catalogo(self, tamaño, nombre):
+        carpeta = ""
+        if(tamaño == 10):
+            carpeta = "10x10"
+        elif(tamaño == 15):
+            carpeta = "15x15"
+        elif(tamaño == 20):
+            carpeta = "20x20"
+        ruta_catalogo = os.path.join(os.path.dirname(__file__), "catalogo", carpeta, nombre + ".pkl")
+        self.gestor.guardar_estado()
+        with open(ruta_catalogo, "wb") as archivo:
+            pickle.dump(self.mementos[-1], archivo)
+
 
     #metodo que permite cargar un nonograma Objetivo para poder jugar
     def cargarObjetivo(self, ruta_cargado):

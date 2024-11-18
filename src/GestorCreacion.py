@@ -1,5 +1,5 @@
 import pygame
-from orca.input_event import KEYBOARD_EVENT
+
 from pygame import MOUSEBUTTONDOWN
 from pygame.constants import USEREVENT
 
@@ -9,7 +9,7 @@ from src.memento import mementoCreacion
 from src.Color import Color
 import math
 from src.colorbutton import colorbutton
-
+from src.text_box import Text_box
 color_buttons = [
     colorbutton(image=pygame.image.load("assets/black.png"), pos=(1100, 50), color=Color.BLACK.value, size=(50, 50)),
     colorbutton(image=pygame.image.load("assets/blue.png"), pos=(1160, 50), color=Color.BLUE.value, size=(50, 50)),
@@ -26,7 +26,10 @@ color_buttons = [
 #undo_button = colorbutton(image=pygame.image.load("assets/deshacer.png"), pos=(1100, 450), color=None, size=(100, 100))
 class GestorCreacion:
     def __init__(self, tamañoTablero):
+        self.tamañoTablero = tamañoTablero
         self.tableroObjetivo = Tablero(tamañoTablero, math.floor((-25*tamañoTablero)/10 + 75))
+        self.text_box = None  # Inicializa el cuadro de texto
+        self.estado = False #Estado para finalizar creacion de nonograma
 
     def guardar_estado(self):
         m = mementoCreacion(self.tableroObjetivo)
@@ -51,6 +54,9 @@ class GestorCreacion:
         desfase_x = 150
         desfase_y = 150
         self.tableroObjetivo.dibujar(screen, desfase_x, desfase_y)
+        # Dibuja el cuadro de texto si está inicializado
+        if self.text_box:
+            self.text_box.draw()
 
     def handle_events(self, event, caretaker):
         #Manejar eventos de teclado y mouse
@@ -72,3 +78,9 @@ class GestorCreacion:
                 caretaker.deshacer()
             elif event.key == pygame.K_r:
                 caretaker.rehacer()
+        if self.text_box:
+            self.text_box.process_events(event)
+            if self.text_box.check_button():  # Si se presiona el botón de guardar
+                nombre = self.text_box.getText()  # Obtiene el texto ingresado
+                caretaker.añadir_en_catalogo(self.tamañoTablero, nombre)
+                self.estado = True
