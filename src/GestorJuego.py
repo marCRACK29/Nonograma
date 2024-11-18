@@ -43,10 +43,15 @@ class GestorJuego:
     def cargar_estado(self, memento):
         tableros_cargados = memento.get_state()
         if isinstance(tableros_cargados, tuple):
-            self.tableroJugador, self.tableroObjetivo = tableros_cargados
+            self.tableroJugador = tableros_cargados[0]  # Si es una tupla, tomar el primer elemento
+            self.tableroObjetivo = tableros_cargados[1]  # Si es una tupla, tomar el segundo elemento
         else:
-            self.tableroJugador, self.tableroObjetivo = tableros_cargados
+            self.tableroJugador = tableros_cargados[0]
+            self.tableroObjetivo = tableros_cargados[1]
         print("Cargado")
+        self.tamañoTablero = self.tableroObjetivo.tamaño
+        self.tamañoCasilla = self.tableroJugador.tamañoCasilla
+
 
     #Metodo que permite cargar un tablero objetivo usando un mementoCreacion
     def cargar_objetivo(self, memento):

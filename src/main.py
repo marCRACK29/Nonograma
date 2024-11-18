@@ -19,7 +19,6 @@ def continuar_partida():
     gestor_juego = GestorJuego(10) # Crear un gestor de juego con el tamaño del nonograma seleccionado
     caretaker = Caretaker(gestor_juego)
     caretaker.cargarPartida()
-
     while True:
         PLAY_MOUSE_POS = pygame.mouse.get_pos()
 

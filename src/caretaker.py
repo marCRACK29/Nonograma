@@ -13,7 +13,10 @@ class Caretaker:
         self.undo_stack = []
         self.redo_stack = []
 
-        self.añadirMemento()
+        m = self.gestor.guardar_estado()
+        self.mementos.append(m)  # Se agrega memento al stack de mementos
+        self.undo_stack.append(m)  # Se agrega memento al stack de undo
+        self.redo_stack.clear()
 
     def deshacer(self):
         if len(self.undo_stack) > 1:
@@ -71,24 +74,26 @@ class Caretaker:
 
             if gestor_type == "GestorCreacion":
                 print("Cargando desde GestorCreacion")
-                ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "nonogramaUsuarioCreacion.pkl")
-                print("Se carga creacion")
+                ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "penguin.pkl")
             elif gestor_type == "GestorJuego":
                 print("Cargando desde GestorJuego")
                 ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "hola.pkl")
-                print("Se carga juego")
             else:
                 print(f"Tipo de gestor no reconocido al cargar: {gestor_type}")
                 return
 
             with open(ruta_cargado, "rb") as archivo:
                 m = pickle.load(archivo)
+                print(f"Memento cargado: {m}")  # Verifica el contenido del memento
                 self.gestor.cargar_estado(m)
+
             if gestor_type == "GestorJuego":
-                print("tas jugando")
+                print("Cargando pistas del juego")
                 self.gestor.pistasFilas()
                 self.gestor.pistasColumnas()
 
+        except FileNotFoundError:
+            print("¡ERROR! El archivo de guardado no se encontró.")
         except Exception as e:
             print(f"Error al cargar: {str(e)}")
             import traceback

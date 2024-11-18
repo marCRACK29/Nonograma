@@ -4,6 +4,7 @@ import pygame
 class Tablero:
     def __init__(self,tamaño, tamañoCasilla):
         self.tamaño = tamaño
+        self.tamañoCasilla = tamañoCasilla
         self.casillas = [[Casilla(y * tamañoCasilla, x * tamañoCasilla, tamañoCasilla, y, x) for x in range(tamaño)] for y in range(tamaño)]
 
     def dibujar(self, screen, desplazamiento_x=0, desplazamiento_y=0):
