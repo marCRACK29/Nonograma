@@ -30,7 +30,6 @@ class GestorCreacion:
         self.tableroObjetivo = Tablero(tamañoTablero, math.floor((-25*tamañoTablero)/10 + 75))
         self.text_box = None  # Inicializa el cuadro de texto
         self.estado = False #Estado para finalizar creacion de nonograma
-
     def guardar_estado(self):
         m = mementoCreacion(self.tableroObjetivo)
         print("Guardado")
@@ -66,21 +65,20 @@ class GestorCreacion:
                     if boton.checkForInput(event.pos):
                         Proxy.set_color(boton.get_color())
                         break
-                #if undo_button.checkForInput(event.pos):
-                    #caretaker.deshacer()
                 caretaker.añadirMemento()
                 self.tableroObjetivo.manejar_evento(event, Proxy.get_color())
             elif event.button == 3:  # Click derecho
                 caretaker.añadirMemento()
                 self.tableroObjetivo.manejar_evento(event, Color.WHITE.value)
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_d:
-                caretaker.deshacer()
-            elif event.key == pygame.K_r:
-                caretaker.rehacer()
         if self.text_box:
             self.text_box.process_events(event)
             if self.text_box.check_button():  # Si se presiona el botón de guardar
                 nombre = self.text_box.getText()  # Obtiene el texto ingresado
                 caretaker.añadir_en_catalogo(self.tamañoTablero, nombre)
                 self.estado = True
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_d:
+                caretaker.deshacer()
+            elif event.key == pygame.K_r:
+                caretaker.rehacer()
+
