@@ -45,7 +45,7 @@ class GestorJuego:
         if isinstance(tableros_cargados, tuple):
             self.tableroJugador, self.tableroObjetivo = tableros_cargados
         else:
-            self.tableroJugador = tableros_cargados
+            self.tableroJugador, self.tableroObjetivo = tableros_cargados
         print("Cargado")
 
     #Metodo que permite cargar un tablero objetivo usando un mementoCreacion
@@ -185,6 +185,8 @@ class GestorJuego:
                 caretaker.rehacer()
             elif event.key == pygame.K_a:
                 self.ayuda()
+            elif event.key == pygame.K_l:
+                caretaker.cargarPartida()
 
         if event.type == pygame.USEREVENT:
             self.comprobar(event.fila, event.columna, event.color)

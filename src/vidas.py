@@ -1,9 +1,9 @@
-from cgi import maxlen
+#from cgi import maxlen
 
 import pygame
 import os
 
-from pygame.examples.cursors import image
+#from pygame.examples.cursors import image
 
 
 class HP_counter:
@@ -13,6 +13,8 @@ class HP_counter:
         self.scale = scale
         self.pos = position
         self.lives = maxLives
+        self.heartImage = pygame.image.load(os.path.join("assets", "heart.png"))
+        self.noheartImage = pygame.image.load(os.path.join("assets", "noHeart.png"))
     def loseLife(self):
         self.lives -= 1
         if self.lives <= 0: self.lives = 0

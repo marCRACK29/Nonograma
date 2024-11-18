@@ -3,7 +3,7 @@ from button import Button
 from GestorJuego import GestorJuego
 from GestorCreacion import GestorCreacion
 from caretaker import Caretaker
-
+from vidas import HP_counter
 pygame.init()
 
 SCREEN = pygame.display.set_mode((1280, 720))
@@ -14,9 +14,50 @@ BG = pygame.image.load("assets/Background.png")
 def get_font(size) -> pygame.font.Font:
     return pygame.font.Font("assets/font.ttf", size)
 
+#Menú para continuar jugando
+def continuar_partida():
+    gestor_juego = GestorJuego(10) # Crear un gestor de juego con el tamaño del nonograma seleccionado
+    caretaker = Caretaker(gestor_juego)
+    caretaker.cargarPartida()
+
+    while True:
+        PLAY_MOUSE_POS = pygame.mouse.get_pos()
+
+        SCREEN.fill("White")
+
+        PLAY_TEXT = get_font(45).render("Nonograma", True, "White") # Titulo
+        PLAY_RECT = PLAY_TEXT.get_rect(midtop=(640, 100)) # Posicion del titulo
+        SCREEN.blit(PLAY_TEXT, PLAY_RECT) # Dibujar el titulo en la pantalla
+
+        # A continuación los botones para esta ventana
+        PLAY_BACK = Button(image=None, pos=(1100, 460),
+                           text_input="BACK", font=get_font(75), base_color="Black", color_flotante="Green")
+
+        # Cambiar el color del boton si el mouse esta encima
+        PLAY_BACK.changeColor(PLAY_MOUSE_POS)
+        PLAY_BACK.update(SCREEN)
+
+        # Un manejador de eventos para los botones
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            gestor_juego.handle_events(event, caretaker)
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
+                    main_menu()
+                # Dibujar el tablero de juego en la pantalla
+        gestor_juego.draw(SCREEN)
+        pygame.display.update() #
+
 # Ventana donde se muestra el nonograma
 def play(tamaño, ruta_nonograma):
     gestor_juego = GestorJuego(tamaño) # Crear un gestor de juego con el tamaño del nonograma seleccionado
+    if True:  # TODO: reemplazar por logica de "si se va a jugar con vidas"
+        vidas = HP_counter(3, 4, (900, 30))
+        gestor_juego.contadorVidas = vidas
     caretaker = Caretaker(gestor_juego)
     caretaker.cargarObjetivo(ruta_nonograma)
 
@@ -282,15 +323,17 @@ def main_menu():
                                  text_input="TUTORIAL", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
         CREACION_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 375),
                                  text_input="CREACION", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
-        CATALOGO_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 500),
+        CONTINUAR_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 500),
+                                 text_input="CONTINUAR", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
+        CATALOGO_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 625),
                                     text_input="JUGAR", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
-        QUIT_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 625),
+        QUIT_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 750),
                              text_input="QUIT", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
 
         SCREEN.blit(MENU_TEXT, MENU_RECT) # Dibujar el titulo en la pantalla
 
         # Cambiar el color del boton si el mouse esta encima
-        for button in [CATALOGO_BUTTON, TUTORIAL_BUTTON, CREACION_BUTTON, QUIT_BUTTON]:
+        for button in [CATALOGO_BUTTON, TUTORIAL_BUTTON, CREACION_BUTTON, QUIT_BUTTON, CONTINUAR_BUTTON]:
             button.changeColor(MENU_MOUSE_POS)
             button.update(SCREEN)
 
@@ -300,6 +343,8 @@ def main_menu():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
+                if CONTINUAR_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    continuar_partida()
                 if CATALOGO_BUTTON.checkForInput(MENU_MOUSE_POS):
                     catalogo()
                 if TUTORIAL_BUTTON.checkForInput(MENU_MOUSE_POS):

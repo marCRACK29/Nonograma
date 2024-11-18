@@ -50,7 +50,7 @@ class Caretaker:
             if gestor_type == "GestorCreacion":
                 ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "penguin.pkl")
             elif gestor_type == "GestorJuego":
-                ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "partida.pkl")
+                ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "hola.pkl")
             else:
                 print(f"Tipo de gestor no reconocido: {gestor_type}")
                 return
@@ -75,7 +75,7 @@ class Caretaker:
                 print("Se carga creacion")
             elif gestor_type == "GestorJuego":
                 print("Cargando desde GestorJuego")
-                ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorJuego", "nonogramaUsuarioJuego.pkl")
+                ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "hola.pkl")
                 print("Se carga juego")
             else:
                 print(f"Tipo de gestor no reconocido al cargar: {gestor_type}")
@@ -84,15 +84,18 @@ class Caretaker:
             with open(ruta_cargado, "rb") as archivo:
                 m = pickle.load(archivo)
                 self.gestor.cargar_estado(m)
+            if gestor_type == "GestorJuego":
+                print("tas jugando")
+                self.gestor.pistasFilas()
+                self.gestor.pistasColumnas()
 
         except Exception as e:
             print(f"Error al cargar: {str(e)}")
             import traceback
             traceback.print_exc()
 
-        with open(ruta_cargado, "rb") as archivo:
-            m = pickle.load(archivo)
-            self.gestor.cargar_estado(m)
+
+
     #Metodo que permite guardar en catalogo el nonograma creado por usuario
     def añadir_a_catalogo(self, tamaño, nombre):
         return
