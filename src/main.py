@@ -357,6 +357,7 @@ def mostrar_nonogramas(tamaño):
         pygame.display.update()
 # Ventana principal del menú, la primera en mostrarse
 def main_menu():
+    import os
     while True:
         SCREEN.blit(BG, (0, 0)) # Fondo de pantalla
 
@@ -364,23 +365,35 @@ def main_menu():
         MENU_TEXT = get_font(100).render("NONOGRAMA", True, "#b68f40")
         MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
 
+        saved_game_exists = os.path.exists('guardadoPartida/partidaGuardada.pkl')
+
         # A continuación los botones para esta ventana (cuatro botones)
         #PLAY_BUTTON = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(640, 250), text_input="PLAY", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
-        TUTORIAL_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 250),
-                                 text_input="TUTORIAL", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
-        CREACION_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 375),
-                                 text_input="CREACION", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
-        CONTINUAR_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 500),
-                                 text_input="CONTINUAR", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
-        CATALOGO_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 625),
-                                    text_input="JUGAR", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
-        QUIT_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 750),
-                             text_input="QUIT", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
+        if saved_game_exists:
+            CONTINUAR_BUTTON = Button(image=None, pos=(640, 250),
+                                      text_input="CONTINUAR", font=get_font(50), base_color="#d7fcd4",
+                                      color_flotante="White")
+
+        CATALOGO_BUTTON = Button(image=None, pos=(640, 350),
+                                 text_input="JUGAR", font=get_font(50), base_color="#d7fcd4", color_flotante="White")
+
+        CREACION_BUTTON = Button(image=None, pos=(640, 450),
+                                 text_input="CREACION", font=get_font(50), base_color="#d7fcd4", color_flotante="White")
+
+
+        TUTORIAL_BUTTON = Button(image=None, pos=(640, 550),
+                                 text_input="TUTORIAL", font=get_font(50), base_color="#d7fcd4", color_flotante="White")
+        QUIT_BUTTON = Button(image=None, pos=(640, 650),
+                             text_input="QUIT", font=get_font(50), base_color="#d7fcd4", color_flotante="White")
 
         SCREEN.blit(MENU_TEXT, MENU_RECT) # Dibujar el titulo en la pantalla
 
         # Cambiar el color del boton si el mouse esta encima
-        for button in [CATALOGO_BUTTON, TUTORIAL_BUTTON, CREACION_BUTTON, QUIT_BUTTON, CONTINUAR_BUTTON]:
+        buttons = [CATALOGO_BUTTON, TUTORIAL_BUTTON, CREACION_BUTTON, QUIT_BUTTON]
+        if saved_game_exists:
+            buttons.append(CONTINUAR_BUTTON)
+
+        for button in buttons:
             button.changeColor(MENU_MOUSE_POS)
             button.update(SCREEN)
 
@@ -390,7 +403,7 @@ def main_menu():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if CONTINUAR_BUTTON.checkForInput(MENU_MOUSE_POS):
+                if saved_game_exists and CONTINUAR_BUTTON.checkForInput(MENU_MOUSE_POS):
                     continuar_partida()
                 if CATALOGO_BUTTON.checkForInput(MENU_MOUSE_POS):
                     catalogo()
