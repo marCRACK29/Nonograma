@@ -382,11 +382,133 @@ def mostrar_nonogramas(tamaño):
 
         pygame.display.update()
 
+def eliminar_nonogramas(tamaño):
+    import os
+    tamaño_int = int(tamaño.split('x')[0])  # Se extrae el tamaño del nonograma
+    # Ruta al directorio de catálogo para el tamaño seleccionado
+    ruta_catalogo = os.path.join("catalogo", tamaño)
+
+    # Obtener lista de nonogramas disponibles
+    try:
+        nonogramas = [f for f in os.listdir(ruta_catalogo) if f.endswith('.pkl')]
+    except FileNotFoundError:
+        nonogramas = []
+
+    pagina_actual = 0
+    items_por_pagina = 8  # Número de nonogramas por página
+
+    while True:
+        SCREEN.fill("black")
+
+        # Título
+        TITULO = get_font(45).render(f"Eliminar Nonogramas {tamaño}", True, "White")
+        TITULO_RECT = TITULO.get_rect(center=(640, 50))
+        SCREEN.blit(TITULO, TITULO_RECT)
+
+        # Mostrar lista de nonogramas según la página actual
+        inicio = pagina_actual * items_por_pagina
+        fin = inicio + items_por_pagina
+        nonogramas_visibles = nonogramas[inicio:fin]
+
+        y_pos = 150
+        botones_nonogramas = []
+        for nonograma in nonogramas_visibles:
+            nombre = nonograma.replace('.pkl', '')
+            boton = Button(image=None, pos=(640, y_pos),
+                           text_input=nombre, font=get_font(35),
+                           base_color="White", color_flotante="Red")
+            botones_nonogramas.append(boton)
+            y_pos += 60
+
+        # Botones para navegar entre páginas
+        FLECHA_IZQUIERDA = Button(image=None, pos=(100, 360),
+                                  text_input="<", font=get_font(75),
+                                  base_color="White", color_flotante="Green")
+        FLECHA_DERECHA = Button(image=None, pos=(1180, 360),
+                                text_input=">", font=get_font(75),
+                                base_color="White", color_flotante="Green")
+
+        # Botón de regreso
+        BACK = Button(image=None, pos=(640, 660),
+                      text_input="BACK", font=get_font(75),
+                      base_color="White", color_flotante="Green")
+
+        MOUSE_POS = pygame.mouse.get_pos()
+
+        # Dibujar botones
+        for boton in botones_nonogramas + [BACK, FLECHA_IZQUIERDA, FLECHA_DERECHA]:
+            boton.changeColor(MOUSE_POS)
+            boton.update(SCREEN)
+
+        # Manejo de eventos
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if BACK.checkForInput(MOUSE_POS):
+                    catalogo()
+                if FLECHA_IZQUIERDA.checkForInput(MOUSE_POS) and pagina_actual > 0:
+                    pagina_actual -= 1
+                if FLECHA_DERECHA.checkForInput(MOUSE_POS) and fin < len(nonogramas):
+                    pagina_actual += 1
+                for i, boton in enumerate(botones_nonogramas):
+                    if boton.checkForInput(MOUSE_POS):
+                        # Confirmar eliminación
+                        ruta_nonograma = os.path.join(ruta_catalogo, nonogramas[inicio + i])
+                        confirmacion = input(f"¿Seguro que deseas eliminar '{nonogramas[inicio + i]}'? (s/n): ")
+                        if confirmacion.lower() == 's':
+                            os.remove(ruta_nonograma)
+                            nonogramas.pop(inicio + i)  # Actualizar la lista
+                            break
+
+        pygame.display.update()
+def elegir_tamaño_eliminar():
+    while True:
+        ELIMINAR_TAMAÑO_MOUSE_POS = pygame.mouse.get_pos()
+
+        SCREEN.fill("black")
+
+        ELIMINAR_TAMAÑO_TEXT = get_font(45).render("Eliminar Tamaño", True, "White")
+        ELIMINAR_TAMAÑO_RECT = ELIMINAR_TAMAÑO_TEXT.get_rect(center=(640, 100))
+        SCREEN.blit(ELIMINAR_TAMAÑO_TEXT, ELIMINAR_TAMAÑO_RECT)
+
+        TAMAÑO_10 = Button(image=None, pos=(640, 260),
+                           text_input="10 x 10", font=get_font(60), base_color="White", color_flotante="Green")
+        TAMAÑO_15 = Button(image=None, pos=(640, 360),
+                           text_input="15 x 15", font=get_font(60), base_color="White", color_flotante="Green")
+        TAMAÑO_20 = Button(image=None, pos=(640, 460),
+                           text_input="20 x 20", font=get_font(60), base_color="White", color_flotante="Green")
+        ELIMINAR_TAMAÑO_BACK = Button(image=None, pos=(640, 560),
+                                      text_input="BACK", font=get_font(60), base_color="White", color_flotante="Green")
+
+        for button in [TAMAÑO_10, TAMAÑO_15, TAMAÑO_20, ELIMINAR_TAMAÑO_BACK]:
+            button.changeColor(ELIMINAR_TAMAÑO_MOUSE_POS)
+            button.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if ELIMINAR_TAMAÑO_BACK.checkForInput(ELIMINAR_TAMAÑO_MOUSE_POS):
+                    main_menu()
+                if TAMAÑO_10.checkForInput(ELIMINAR_TAMAÑO_MOUSE_POS):
+                    eliminar_nonogramas("10x10")
+                if TAMAÑO_15.checkForInput(ELIMINAR_TAMAÑO_MOUSE_POS):
+                    eliminar_nonogramas("15x15")
+                if TAMAÑO_20.checkForInput(ELIMINAR_TAMAÑO_MOUSE_POS):
+                    eliminar_nonogramas("20x20")
+
+        pygame.display.update()
+
+
 # Ventana principal del menú, la primera en mostrarse
 def main_menu():
     import os
     while True:
-        SCREEN.blit(BG, (0, 0)) # Fondo de pantalla
+        SCREEN.blit(BG, (0, 0))  # Fondo de pantalla
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
         MENU_TEXT = get_font(100).render("NONOGRAMA", True, "#b68f40")
@@ -394,37 +516,40 @@ def main_menu():
 
         saved_game_exists = os.path.exists('guardadoPartida/partidaGuardada.pkl')
 
-        # A continuación los botones para esta ventana (cuatro botones)
-        #PLAY_BUTTON = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(640, 250), text_input="PLAY", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
+        # Botones del menú principal
         if saved_game_exists:
-            CONTINUAR_BUTTON = Button(image=None, pos=(640, 250),
+            CONTINUAR_BUTTON = Button(image=None, pos=(300, 250),
                                       text_input="CONTINUAR", font=get_font(50), base_color="#d7fcd4",
                                       color_flotante="White")
 
-        CATALOGO_BUTTON = Button(image=None, pos=(640, 350),
+        CATALOGO_BUTTON = Button(image=None, pos=(300, 350),
                                  text_input="JUGAR", font=get_font(50), base_color="#d7fcd4", color_flotante="White")
 
-        CREACION_BUTTON = Button(image=None, pos=(640, 450),
+        ELIMINAR_BUTTON = Button(image=None, pos=(1000, 650),
+                                 text_input="ELIMINAR", font=get_font(50), base_color="#d7fcd4", color_flotante="Red")
+
+        CREACION_BUTTON = Button(image=None, pos=(300, 450),
                                  text_input="CREACION", font=get_font(50), base_color="#d7fcd4", color_flotante="White")
 
-
-        TUTORIAL_BUTTON = Button(image=None, pos=(640, 550),
+        TUTORIAL_BUTTON = Button(image=None, pos=(300, 550),
                                  text_input="TUTORIAL", font=get_font(50), base_color="#d7fcd4", color_flotante="White")
-        QUIT_BUTTON = Button(image=None, pos=(640, 650),
+
+        QUIT_BUTTON = Button(image=None, pos=(300, 650),
                              text_input="QUIT", font=get_font(50), base_color="#d7fcd4", color_flotante="White")
 
-        SCREEN.blit(MENU_TEXT, MENU_RECT) # Dibujar el titulo en la pantalla
+        SCREEN.blit(MENU_TEXT, MENU_RECT)  # Dibujar el título en la pantalla
 
-        # Cambiar el color del boton si el mouse esta encima
-        buttons = [CATALOGO_BUTTON, TUTORIAL_BUTTON, CREACION_BUTTON, QUIT_BUTTON]
+        # Lista de botones
+        buttons = [CATALOGO_BUTTON, TUTORIAL_BUTTON, CREACION_BUTTON, QUIT_BUTTON, ELIMINAR_BUTTON]
         if saved_game_exists:
             buttons.append(CONTINUAR_BUTTON)
 
+        # Cambiar el color de los botones si el mouse está encima
         for button in buttons:
             button.changeColor(MENU_MOUSE_POS)
             button.update(SCREEN)
 
-        # Un manejador de eventos para los botones (se realizan las "transiciones")
+        # Manejo de eventos para los botones
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -434,13 +559,17 @@ def main_menu():
                     continuar_partida()
                 if CATALOGO_BUTTON.checkForInput(MENU_MOUSE_POS):
                     catalogo()
-                if TUTORIAL_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    tutorial()
+                if ELIMINAR_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    elegir_tamaño_eliminar()  # Nuevo menú para eliminar nonogramas
                 if CREACION_BUTTON.checkForInput(MENU_MOUSE_POS):
                     elegir_tamaño_creacion()
+                if TUTORIAL_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    tutorial()
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                     pygame.quit()
                     sys.exit()
+
         pygame.display.update()
+
 
 main_menu()
