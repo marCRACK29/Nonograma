@@ -12,6 +12,34 @@ pygame.display.set_caption("Nonograma")
 
 BG = pygame.image.load("assets/Background.png")
 
+class ScrollBar:
+    def __init__(self, x, y, width, height, total_items, item_height):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.total_items = total_items
+        self.item_height = item_height
+        self.visible_items = height // item_height
+        self.scroll_ratio = self.visible_items / total_items if total_items > 0 else 0
+        self.scroll_position = 0
+
+    def draw(self, screen):
+        # Dibuja la barra de desplazamiento
+        pygame.draw.rect(screen, (200, 200, 200), self.rect)  # Fondo de la barra
+        if self.scroll_ratio < 1:
+            scroll_height = int(self.rect.height * self.scroll_ratio)
+            scroll_y = int(self.scroll_position * self.scroll_ratio)
+            scroll_rect = pygame.Rect(self.rect.x, self.rect.y + scroll_y, self.rect.width, scroll_height)
+            pygame.draw.rect(screen, (100, 100, 100), scroll_rect)  # Barra de desplazamiento
+
+    def update(self, mouse_pos, mouse_pressed):
+        if self.rect.collidepoint(mouse_pos):
+            if mouse_pressed[0]:  # Si el botón izquierdo del mouse está presionado
+                mouse_y = mouse_pos[1] - self.rect.y
+                self.scroll_position = max(0, min(mouse_y / self.rect.height * self.total_items, self.total_items - self.visible_items))
+
+    def get_scroll_offset(self):
+        return int(self.scroll_position)
+
+
 def get_font(size) -> pygame.font.Font:
     return pygame.font.Font("assets/font.ttf", size)
 
@@ -225,10 +253,10 @@ def creacion(tamañoTablero):
         SCREEN.blit(CREACION_TEXT, CREACION_RECT)
 
         CREACION_BACK = Button(image=None, pos=(1100, 560),
-                           text_input="BACK", font=get_font(75), base_color="Black", color_flotante="Green")
+                           text_input="BACK", font=get_font(50), base_color="Black", color_flotante="Green")
 
-        CREACION_GUARDAR = Button(image=None, pos=(1100, 660),
-                           text_input="GUARDAR", font=get_font(75), base_color="Black", color_flotante="Green")
+        CREACION_GUARDAR = Button(image=None, pos=(1050, 660),
+                           text_input="GUARDAR", font=get_font(50), base_color="Black", color_flotante="Green")
 
         for button in [CREACION_BACK, CREACION_GUARDAR]:
             button.changeColor(CREACION_MOUSE_POS)
@@ -302,7 +330,7 @@ def catalogo():
 
 def mostrar_nonogramas(tamaño):
     import os
-    tamaño_int = int(tamaño.split('x')[0]) #Se extrae el tamaño del nonograma
+    tamaño_int = int(tamaño.split('x')[0])  # Se extrae el tamaño del nonograma
     # Ruta al directorio de catálogo para el tamaño seleccionado
     ruta_catalogo = os.path.join("catalogo", tamaño)
 
@@ -311,6 +339,8 @@ def mostrar_nonogramas(tamaño):
         nonogramas = [f for f in os.listdir(ruta_catalogo) if f.endswith('.pkl')]
     except FileNotFoundError:
         nonogramas = []
+
+    scrollbar = ScrollBar(1100, 150, 20, 500, len(nonogramas), 60)  # Ajusta la posición y tamaño de la barra
 
     while True:
         SCREEN.fill("black")
@@ -321,15 +351,16 @@ def mostrar_nonogramas(tamaño):
         SCREEN.blit(TITULO, TITULO_RECT)
 
         # Mostrar lista de nonogramas
-        y_pos = 150
+        y_pos = 150 - scrollbar.get_scroll_offset() * 60  # Ajusta la posición de los botones según el desplazamiento
         botones_nonogramas = []
-        for nonograma in nonogramas:
-            nombre = nonograma.replace('.pkl', '')
-            boton = Button(image=None, pos=(640, y_pos),
-                           text_input=nombre, font=get_font(35),
-                           base_color="White", color_flotante="Green")
-            botones_nonogramas.append(boton)
-            y_pos += 60
+        for i, nonograma in enumerate(nonogramas):
+            if i >= scrollbar.get_scroll_offset() and i < scrollbar.get_scroll_offset() + 8:  # Muestra solo 8 nonogramas a la vez
+                nombre = nonograma.replace('.pkl', '')
+                boton = Button(image=None, pos=(640, y_pos),
+                               text_input=nombre, font=get_font(35),
+                               base_color="White", color_flotante="Green")
+                botones_nonogramas.append(boton)
+                y_pos += 60
 
         BACK = Button(image=None, pos=(640, 660),
                       text_input="BACK", font=get_font(75),
@@ -354,9 +385,13 @@ def mostrar_nonogramas(tamaño):
                         ruta_nonograma = os.path.join(ruta_catalogo, nonogramas[i])
                         play(tamaño_int, ruta_nonograma)
 
+        scrollbar.update(MOUSE_POS, pygame.mouse.get_pressed())  # Actualiza la barra deslizable
+        scrollbar.draw(SCREEN)  # Dibuja la barra deslizable
+
         pygame.display.update()
 # Ventana principal del menú, la primera en mostrarse
 def main_menu():
+    import os
     while True:
         SCREEN.blit(BG, (0, 0)) # Fondo de pantalla
 
@@ -364,23 +399,35 @@ def main_menu():
         MENU_TEXT = get_font(100).render("NONOGRAMA", True, "#b68f40")
         MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
 
+        saved_game_exists = os.path.exists('guardadoPartida/partidaGuardada.pkl')
+
         # A continuación los botones para esta ventana (cuatro botones)
         #PLAY_BUTTON = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(640, 250), text_input="PLAY", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
-        TUTORIAL_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 250),
-                                 text_input="TUTORIAL", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
-        CREACION_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 375),
-                                 text_input="CREACION", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
-        CONTINUAR_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 500),
-                                 text_input="CONTINUAR", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
-        CATALOGO_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 625),
-                                    text_input="JUGAR", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
-        QUIT_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 750),
-                             text_input="QUIT", font=get_font(75), base_color="#d7fcd4", color_flotante="White")
+        if saved_game_exists:
+            CONTINUAR_BUTTON = Button(image=None, pos=(640, 250),
+                                      text_input="CONTINUAR", font=get_font(50), base_color="#d7fcd4",
+                                      color_flotante="White")
+
+        CATALOGO_BUTTON = Button(image=None, pos=(640, 350),
+                                 text_input="JUGAR", font=get_font(50), base_color="#d7fcd4", color_flotante="White")
+
+        CREACION_BUTTON = Button(image=None, pos=(640, 450),
+                                 text_input="CREACION", font=get_font(50), base_color="#d7fcd4", color_flotante="White")
+
+
+        TUTORIAL_BUTTON = Button(image=None, pos=(640, 550),
+                                 text_input="TUTORIAL", font=get_font(50), base_color="#d7fcd4", color_flotante="White")
+        QUIT_BUTTON = Button(image=None, pos=(640, 650),
+                             text_input="QUIT", font=get_font(50), base_color="#d7fcd4", color_flotante="White")
 
         SCREEN.blit(MENU_TEXT, MENU_RECT) # Dibujar el titulo en la pantalla
 
         # Cambiar el color del boton si el mouse esta encima
-        for button in [CATALOGO_BUTTON, TUTORIAL_BUTTON, CREACION_BUTTON, QUIT_BUTTON, CONTINUAR_BUTTON]:
+        buttons = [CATALOGO_BUTTON, TUTORIAL_BUTTON, CREACION_BUTTON, QUIT_BUTTON]
+        if saved_game_exists:
+            buttons.append(CONTINUAR_BUTTON)
+
+        for button in buttons:
             button.changeColor(MENU_MOUSE_POS)
             button.update(SCREEN)
 
@@ -390,7 +437,7 @@ def main_menu():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if CONTINUAR_BUTTON.checkForInput(MENU_MOUSE_POS):
+                if saved_game_exists and CONTINUAR_BUTTON.checkForInput(MENU_MOUSE_POS):
                     continuar_partida()
                 if CATALOGO_BUTTON.checkForInput(MENU_MOUSE_POS):
                     catalogo()

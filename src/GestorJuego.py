@@ -32,6 +32,7 @@ class GestorJuego:
         self.tamañoCasilla = math.floor((-25*tamañoTablero)/10 + 75)
         self.tableroObjetivo = Tablero(tamañoTablero, self.tamañoCasilla )
         self.tableroJugador = Tablero(tamañoTablero, self.tamañoCasilla)
+        self.ayudas = None
         self.contadorVidas = None #contador de vidas se setea externamente si se va a jugar con vidas, es un HP_counter
         self.numVidas = None #numero de vidas iniciales, es un entero
 
@@ -44,9 +45,15 @@ class GestorJuego:
                     return False
         return True
 
+    def setearAyudas(self, ayudas):
+        if self.ayudas is None:
+            self.ayudas = ayudas
+        else:
+            pass
+
 
     def guardar_estado(self):
-        m = mementoJuego(self.tableroJugador, self.tableroObjetivo, self.contadorVidas.lives)
+        m = mementoJuego(self.tableroJugador, self.tableroObjetivo, self.contadorVidas.lives, self.ayudas)
         #print("Creando mementoJuego")
         return m
 
@@ -59,6 +66,7 @@ class GestorJuego:
             self.tableroJugador = tableros_cargados[0]
             self.tableroObjetivo = tableros_cargados[1]
         print("Cargado")
+        self.setearAyudas(tableros_cargados[3])
         self.tamañoTablero = self.tableroObjetivo.tamaño
         self.tamañoCasilla = self.tableroJugador.tamañoCasilla
 
@@ -72,6 +80,7 @@ class GestorJuego:
             self.tableroObjetivo = tablero_cargado
         self.pistasColumnas()
         self.pistasFilas()
+        self.setearAyudas(3)
 
     #Metodo que pinta una casilla correcta para ayudar al jugador
     def ayuda(self):
@@ -149,8 +158,8 @@ class GestorJuego:
             boton.draw(screen)
 
         tamañoCasilla = self.tamañoCasilla
-        desfase_x = 150
-        desfase_y = 150
+        desfase_x = 300
+        desfase_y = 165
         fuente = pygame.font.Font(None, 20)
         for col, pistas in enumerate(self.numeritosColumnas):
             y_pos = desfase_y- 20  # Empezamos arriba del tablero
@@ -179,6 +188,11 @@ class GestorJuego:
         if self.contadorVidas is not None:
             self.contadorVidas.draw(screen)
 
+        # Dibujar la cantidad de ayudas disponibles
+        ayudas_text = f"Ayudas disponibles: {self.ayudas}"
+        ayudas_render = fuente.render(ayudas_text, True, (0, 0, 0))  # Color negro
+        screen.blit(ayudas_render, (900, desfase_y - 50))  # Posición encima del tablero
+
     def handle_events(self, event, caretaker):
         #Manejar eventos de teclado y mouse
         if event.type == MOUSEBUTTONDOWN:
@@ -199,7 +213,13 @@ class GestorJuego:
             elif event.key == pygame.K_r:
                 caretaker.rehacer()
             elif event.key == pygame.K_a:
-                self.ayuda()
+                if self.ayudas > 0:
+                    caretaker.añadirMemento()
+                    self.ayudas = self.ayudas - 1
+                    self.ayuda()
+                else:
+                    print("No hay más ayudas")
+
             elif event.key == pygame.K_l:
                 caretaker.cargarPartida()
 

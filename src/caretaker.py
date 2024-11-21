@@ -34,7 +34,7 @@ class Caretaker:
 
     def borrarPartida(self):
         try:
-            ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "hola.pkl")
+            ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "partidaGuardada.pkl")
             if os.path.exists(ruta_guardado):
                 os.remove(ruta_guardado)
                 print("Partida guardada eliminada con éxito.")
@@ -57,9 +57,9 @@ class Caretaker:
 
             # Usar el nombre de la clase directamente
             if gestor_type == "GestorCreacion":
-                ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "penguin.pkl")
+                ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "guardadoCreacion.pkl")
             elif gestor_type == "GestorJuego":
-                ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "hola.pkl")
+                ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "partidaGuardada.pkl")
             else:
                 print(f"Tipo de gestor no reconocido: {gestor_type}")
                 return
@@ -80,10 +80,10 @@ class Caretaker:
 
             if gestor_type == "GestorCreacion":
                 print("Cargando desde GestorCreacion")
-                ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "penguin.pkl")
+                ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartidaGestorCreacion", "guardadoCreacion.pkl")
             elif gestor_type == "GestorJuego":
                 print("Cargando desde GestorJuego")
-                ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "hola.pkl")
+                ruta_cargado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "partidaGuardada.pkl")
             else:
                 print(f"Tipo de gestor no reconocido al cargar: {gestor_type}")
                 return
