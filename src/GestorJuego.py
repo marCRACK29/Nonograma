@@ -159,7 +159,7 @@ class GestorJuego:
 
         tamañoCasilla = self.tamañoCasilla
         desfase_x = 300
-        desfase_y = 200
+        desfase_y = 165
         fuente = pygame.font.Font(None, 20)
         for col, pistas in enumerate(self.numeritosColumnas):
             y_pos = desfase_y- 20  # Empezamos arriba del tablero

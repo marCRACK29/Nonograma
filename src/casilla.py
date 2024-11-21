@@ -27,7 +27,7 @@ class Casilla:
             # Ajustar la posición del mouse según el desplazamiento
             mouse_pos = (
                 evento.pos[0] - 300,  # Desplazamiento_x
-                evento.pos[1] - 200   # Desplazamiento_y
+                evento.pos[1] - 165   # Desplazamiento_y
             )
             if self.rect.collidepoint(mouse_pos):
                 self.set_color(color_seleccionado)
