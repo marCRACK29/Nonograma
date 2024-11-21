@@ -12,32 +12,7 @@ pygame.display.set_caption("Nonograma")
 
 BG = pygame.image.load("assets/Background.png")
 
-class ScrollBar:
-    def __init__(self, x, y, width, height, total_items, item_height):
-        self.rect = pygame.Rect(x, y, width, height)
-        self.total_items = total_items
-        self.item_height = item_height
-        self.visible_items = height // item_height
-        self.scroll_ratio = self.visible_items / total_items if total_items > 0 else 0
-        self.scroll_position = 0
 
-    def draw(self, screen):
-        # Dibuja la barra de desplazamiento
-        pygame.draw.rect(screen, (200, 200, 200), self.rect)  # Fondo de la barra
-        if self.scroll_ratio < 1:
-            scroll_height = int(self.rect.height * self.scroll_ratio)
-            scroll_y = int(self.scroll_position * self.scroll_ratio)
-            scroll_rect = pygame.Rect(self.rect.x, self.rect.y + scroll_y, self.rect.width, scroll_height)
-            pygame.draw.rect(screen, (100, 100, 100), scroll_rect)  # Barra de desplazamiento
-
-    def update(self, mouse_pos, mouse_pressed):
-        if self.rect.collidepoint(mouse_pos):
-            if mouse_pressed[0]:  # Si el botón izquierdo del mouse está presionado
-                mouse_y = mouse_pos[1] - self.rect.y
-                self.scroll_position = max(0, min(mouse_y / self.rect.height * self.total_items, self.total_items - self.visible_items))
-
-    def get_scroll_offset(self):
-        return int(self.scroll_position)
 
 
 def get_font(size) -> pygame.font.Font:
@@ -340,7 +315,8 @@ def mostrar_nonogramas(tamaño):
     except FileNotFoundError:
         nonogramas = []
 
-    scrollbar = ScrollBar(1100, 150, 20, 500, len(nonogramas), 60)  # Ajusta la posición y tamaño de la barra
+    pagina_actual = 0
+    items_por_pagina = 8  # Número de nonogramas por página
 
     while True:
         SCREEN.fill("black")
@@ -350,45 +326,62 @@ def mostrar_nonogramas(tamaño):
         TITULO_RECT = TITULO.get_rect(center=(640, 50))
         SCREEN.blit(TITULO, TITULO_RECT)
 
-        # Mostrar lista de nonogramas
-        y_pos = 150 - scrollbar.get_scroll_offset() * 60  # Ajusta la posición de los botones según el desplazamiento
-        botones_nonogramas = []
-        for i, nonograma in enumerate(nonogramas):
-            if i >= scrollbar.get_scroll_offset() and i < scrollbar.get_scroll_offset() + 8:  # Muestra solo 8 nonogramas a la vez
-                nombre = nonograma.replace('.pkl', '')
-                boton = Button(image=None, pos=(640, y_pos),
-                               text_input=nombre, font=get_font(35),
-                               base_color="White", color_flotante="Green")
-                botones_nonogramas.append(boton)
-                y_pos += 60
+        # Mostrar lista de nonogramas según la página actual
+        inicio = pagina_actual * items_por_pagina
+        fin = inicio + items_por_pagina
+        nonogramas_visibles = nonogramas[inicio:fin]
 
+        y_pos = 150
+        botones_nonogramas = []
+        for nonograma in nonogramas_visibles:
+            nombre = nonograma.replace('.pkl', '')
+            boton = Button(image=None, pos=(640, y_pos),
+                           text_input=nombre, font=get_font(35),
+                           base_color="White", color_flotante="Green")
+            botones_nonogramas.append(boton)
+            y_pos += 60
+
+        # Botones para navegar entre páginas
+        FLECHA_IZQUIERDA = Button(image=None, pos=(100, 360),
+                                  text_input="<", font=get_font(75),
+                                  base_color="White", color_flotante="Green")
+        FLECHA_DERECHA = Button(image=None, pos=(1180, 360),
+                                text_input=">", font=get_font(75),
+                                base_color="White", color_flotante="Green")
+
+        # Botón de regreso
         BACK = Button(image=None, pos=(640, 660),
                       text_input="BACK", font=get_font(75),
                       base_color="White", color_flotante="Green")
 
         MOUSE_POS = pygame.mouse.get_pos()
 
-        for boton in botones_nonogramas + [BACK]:
+        # Dibujar botones
+        for boton in botones_nonogramas + [BACK, FLECHA_IZQUIERDA, FLECHA_DERECHA]:
             boton.changeColor(MOUSE_POS)
             boton.update(SCREEN)
 
+        # Manejo de eventos
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if BACK.checkForInput(MOUSE_POS):
                     catalogo()
+                if FLECHA_IZQUIERDA.checkForInput(MOUSE_POS) and pagina_actual > 0:
+                    pagina_actual -= 1
+                if FLECHA_DERECHA.checkForInput(MOUSE_POS) and fin < len(nonogramas):
+                    pagina_actual += 1
                 for i, boton in enumerate(botones_nonogramas):
                     if boton.checkForInput(MOUSE_POS):
-                        # Aquí cargarías el nonograma seleccionado
-                        ruta_nonograma = os.path.join(ruta_catalogo, nonogramas[i])
+                        # Cargar el nonograma seleccionado
+                        ruta_nonograma = os.path.join(ruta_catalogo, nonogramas[inicio + i])
                         play(tamaño_int, ruta_nonograma)
 
-        scrollbar.update(MOUSE_POS, pygame.mouse.get_pressed())  # Actualiza la barra deslizable
-        scrollbar.draw(SCREEN)  # Dibuja la barra deslizable
-
         pygame.display.update()
+
 # Ventana principal del menú, la primera en mostrarse
 def main_menu():
     import os
