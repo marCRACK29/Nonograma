@@ -385,7 +385,6 @@ def mostrar_nonogramas(tamaño):
 def eliminar_nonogramas(tamaño):
     import os
     tamaño_int = int(tamaño.split('x')[0])  # Se extrae el tamaño del nonograma
-    # Ruta al directorio de catálogo para el tamaño seleccionado
     ruta_catalogo = os.path.join("catalogo", tamaño)
 
     # Obtener lista de nonogramas disponibles
@@ -448,7 +447,7 @@ def eliminar_nonogramas(tamaño):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if BACK.checkForInput(MOUSE_POS):
-                    catalogo()
+                    main_menu()
                 if FLECHA_IZQUIERDA.checkForInput(MOUSE_POS) and pagina_actual > 0:
                     pagina_actual -= 1
                 if FLECHA_DERECHA.checkForInput(MOUSE_POS) and fin < len(nonogramas):
@@ -457,13 +456,13 @@ def eliminar_nonogramas(tamaño):
                     if boton.checkForInput(MOUSE_POS):
                         # Confirmar eliminación
                         ruta_nonograma = os.path.join(ruta_catalogo, nonogramas[inicio + i])
-                        confirmacion = input(f"¿Seguro que deseas eliminar '{nonogramas[inicio + i]}'? (s/n): ")
-                        if confirmacion.lower() == 's':
+                        if confirmar_eliminacion(nonogramas[inicio + i]):
                             os.remove(ruta_nonograma)
                             nonogramas.pop(inicio + i)  # Actualizar la lista
-                            break
+                            break  # Volver a renderizar la lista después de eliminar
 
         pygame.display.update()
+
 def elegir_tamaño_eliminar():
     while True:
         ELIMINAR_TAMAÑO_MOUSE_POS = pygame.mouse.get_pos()
@@ -500,6 +499,42 @@ def elegir_tamaño_eliminar():
                     eliminar_nonogramas("15x15")
                 if TAMAÑO_20.checkForInput(ELIMINAR_TAMAÑO_MOUSE_POS):
                     eliminar_nonogramas("20x20")
+
+        pygame.display.update()
+
+def confirmar_eliminacion(nonograma):
+    while True:
+        SCREEN.fill("black")
+
+        # Mensaje de confirmación
+        CONFIRM_TEXT = get_font(45).render(f"¿Eliminar '{nonograma}'?", True, "White")
+        CONFIRM_RECT = CONFIRM_TEXT.get_rect(center=(640, 200))
+        SCREEN.blit(CONFIRM_TEXT, CONFIRM_RECT)
+
+        # Botones "SÍ" y "NO"
+        SI_BUTTON = Button(image=None, pos=(480, 400),
+                           text_input="SÍ", font=get_font(50),
+                           base_color="Green", color_flotante="White")
+        NO_BUTTON = Button(image=None, pos=(800, 400),
+                           text_input="NO", font=get_font(50),
+                           base_color="Red", color_flotante="White")
+
+        MOUSE_POS = pygame.mouse.get_pos()
+
+        for button in [SI_BUTTON, NO_BUTTON]:
+            button.changeColor(MOUSE_POS)
+            button.update(SCREEN)
+
+        # Manejo de eventos
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if SI_BUTTON.checkForInput(MOUSE_POS):
+                    return True
+                if NO_BUTTON.checkForInput(MOUSE_POS):
+                    return False
 
         pygame.display.update()
 
