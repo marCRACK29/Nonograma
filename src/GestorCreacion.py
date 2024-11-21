@@ -50,8 +50,8 @@ class GestorCreacion:
         #undo_button.draw(screen)
         #Metodo para dibujar el tablero en la pantalla
         #screen.fill((255, 255, 255))  # Limpia la pantalla con blanco
-        desfase_x = 150
-        desfase_y = 150
+        desfase_x = 300
+        desfase_y = 165
         self.tableroObjetivo.dibujar(screen, desfase_x, desfase_y)
         # Dibuja el cuadro de texto si está inicializado
         if self.text_box:
