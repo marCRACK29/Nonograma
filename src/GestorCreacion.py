@@ -3,13 +3,13 @@ import pygame
 from pygame import MOUSEBUTTONDOWN
 from pygame.constants import USEREVENT
 
-from src.Proxy import Proxy
-from src.tablero import Tablero
-from src.memento import mementoCreacion
-from src.Color import Color
+from Proxy import Proxy
+from tablero import Tablero
+from memento import mementoCreacion
+from Color import Color
 import math
-from src.colorbutton import colorbutton
-from src.text_box import Text_box
+from colorbutton import colorbutton
+
 color_buttons = [
     colorbutton(image=pygame.image.load("assets/black.png"), pos=(1100, 50), color=Color.BLACK.value, size=(50, 50)),
     colorbutton(image=pygame.image.load("assets/blue.png"), pos=(1160, 50), color=Color.BLUE.value, size=(50, 50)),

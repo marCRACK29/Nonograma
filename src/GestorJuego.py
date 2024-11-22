@@ -2,11 +2,11 @@ import math
 
 from pygame import MOUSEBUTTONDOWN
 
-from src.colorbutton import colorbutton
-from src.memento import mementoJuego, mementoCreacion
-from src.tablero import Tablero
-from src.Color import Color
-from src.Proxy import Proxy
+from colorbutton import colorbutton
+from memento import mementoJuego, mementoCreacion
+from tablero import Tablero
+from Color import Color
+from Proxy import Proxy
 import pygame
 
 color_buttons = [

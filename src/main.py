@@ -5,15 +5,21 @@ from GestorCreacion import GestorCreacion
 from caretaker import Caretaker
 from vidas import HP_counter
 from text_box import Text_box
+
+"""
+Ahora se puede ejecutar desde terminal
+Dentro del directorio raiz: 
+$ source .venv/bin/activate
+$ cd src
+$ python3 main.py
+"""
+
 pygame.init()
 
 SCREEN = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("Nonograma")
 
 BG = pygame.image.load("assets/Background.png")
-
-
-
 
 def get_font(size) -> pygame.font.Font:
     return pygame.font.Font("assets/font.ttf", size)

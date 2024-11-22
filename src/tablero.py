@@ -1,4 +1,4 @@
-from src.casilla import Casilla
+from casilla import Casilla
 import pygame
 
 class Tablero:

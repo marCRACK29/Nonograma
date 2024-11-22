@@ -1,4 +1,4 @@
-from src.Color import Color
+from Color import Color
 
 class Proxy:
     color = Color.BLACK.value

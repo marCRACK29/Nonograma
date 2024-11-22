@@ -1,7 +1,6 @@
 import pygame
 
-from src.Color import Color
-from src.Proxy import Proxy
+from Color import Color
 
 class Casilla:
 

@@ -1,9 +1,7 @@
 import os
 import pickle
 
-from src.GestorCreacion import GestorCreacion
-from src.GestorJuego import GestorJuego
-from src.vidas import HP_counter
+from vidas import HP_counter
 
 
 class Caretaker:
