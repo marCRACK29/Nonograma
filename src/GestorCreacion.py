@@ -23,11 +23,14 @@ color_buttons = [
     colorbutton(image_base=pygame.image.load("assets/red.png"), image_flotante = pygame.image.load("assets/red_flotante.png"),pos=(1160, 290), color=Color.RED.value, size=(50, 50)),
     colorbutton(image_base=pygame.image.load("assets/yellow.png"), image_flotante = pygame.image.load("assets/yellow_flotante.png"),pos=(1130, 350), color=Color.YELLOW.value, size=(50, 50)),
 ]
-#undo_button = colorbutton(image=pygame.image.load("assets/deshacer.png"), pos=(1100, 450), color=None, size=(100, 100))
+n = 80
+DESHACER = colorbutton(image_base=pygame.image.load("assets/deshacer.png"), image_flotante = pygame.image.load("assets/deshacer.png"),pos=(1050, 450), color=None, size=(n, n))
+REHACER = colorbutton(image_base=pygame.image.load("assets/rehacer.png"), image_flotante = pygame.image.load("assets/rehacer.png"),pos=(1150, 450), color=None, size=(n, n))
 class GestorCreacion:
     def __init__(self, tamañoTablero):
         self.tamañoTablero = tamañoTablero
-        self.tableroObjetivo = Tablero(tamañoTablero, math.floor((-25*tamañoTablero)/10 + 75))
+        self.tamañoCasilla =  math.floor((-25*tamañoTablero)/10 + 75)
+        self.tableroObjetivo = Tablero(tamañoTablero, self.tamañoCasilla)
         self.text_box = None  # Inicializa el cuadro de texto
         self.estado = False #Estado para finalizar creacion de nonograma
     def guardar_estado(self):
@@ -42,11 +45,27 @@ class GestorCreacion:
         else:
             self.tableroObjetivo = tablero_cargado
         print("Cargado")
+    def es_clic_valido(self, pos):
+        # Calcula las coordenadas del tablero
+        desfase_x = 300
+        desfase_y = 165
+        tamaño_tablero_px = self.tamañoTablero * self.tamañoCasilla
+
+        # Obtén las coordenadas del clic
+        x, y = pos
+
+        # Verifica si el clic está dentro del área del tablero
+        if (desfase_x <= x < desfase_x + tamaño_tablero_px and
+                desfase_y <= y < desfase_y + tamaño_tablero_px):
+            return True
+        return False
 
 
     def draw(self, screen):
         for boton in color_buttons:
             boton.draw(screen)
+        DESHACER.draw(screen)
+        REHACER.draw(screen)
         #undo_button.draw(screen)
         #Metodo para dibujar el tablero en la pantalla
         #screen.fill((255, 255, 255))  # Limpia la pantalla con blanco
@@ -60,16 +79,25 @@ class GestorCreacion:
     def handle_events(self, event, caretaker):
         #Manejar eventos de teclado y mouse
         if event.type == MOUSEBUTTONDOWN:
-            if event.button == 1:
+            if event.button == 1:  # Click izquierdo
+                # Verificar si se hizo clic en algún botón de color
                 for boton in color_buttons:
                     if boton.checkForInput(event.pos):
                         Proxy.set_color(boton.get_color())
-                        break
-                caretaker.añadirMemento()
-                self.tableroObjetivo.manejar_evento(event, Proxy.get_color())
-            elif event.button == 3:  # Click derecho
-                caretaker.añadirMemento()
-                self.tableroObjetivo.manejar_evento(event, Color.WHITE.value)
+                        return
+
+                # Verificar si se hizo clic en los botones de deshacer/rehacer
+                if DESHACER.checkForInput(event.pos):
+                    caretaker.deshacer()
+                    return
+                elif REHACER.checkForInput(event.pos):
+                    caretaker.rehacer()
+                    return
+
+                # Verificar si el clic está dentro del tablero
+                if self.es_clic_valido(event.pos):
+                    caretaker.añadirMemento()
+                    self.tableroObjetivo.manejar_evento(event, Proxy.get_color())
         if self.text_box:
             self.text_box.process_events(event)
             if self.text_box.check_button():  # Si se presiona el botón de guardar

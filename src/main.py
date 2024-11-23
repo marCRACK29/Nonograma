@@ -223,7 +223,7 @@ def elegir_tamaño_creacion():
 def creacion(tamañoTablero):
     gestor_creacion = GestorCreacion(tamañoTablero)
     caretaker = Caretaker(gestor_creacion)
-
+    caretaker.añadirMemento()
     while True:
         CREACION_MOUSE_POS = pygame.mouse.get_pos()
 

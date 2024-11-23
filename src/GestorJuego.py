@@ -57,7 +57,6 @@ class GestorJuego:
 
     def guardar_estado(self):
         m = mementoJuego(self.tableroJugador, self.tableroObjetivo, self.contadorVidas.lives, self.ayudas)
-        #print("Creando mementoJuego")
         return m
 
     def cargar_estado(self, memento):
@@ -198,34 +197,53 @@ class GestorJuego:
         ayudas_render = fuente.render(ayudas_text, True, (0, 0, 0))  # Color negro
         screen.blit(ayudas_render, (900, desfase_y - 50))  # Posición encima del tablero
 
+    def es_clic_valido(self, pos):
+        # Calcula las coordenadas del tablero
+        desfase_x = 300
+        desfase_y = 165
+        tamaño_tablero_px = self.tamañoTablero * self.tamañoCasilla
+
+        # Obtén las coordenadas del clic
+        x, y = pos
+
+        # Verifica si el clic está dentro del área del tablero
+        if (desfase_x <= x < desfase_x + tamaño_tablero_px and
+                desfase_y <= y < desfase_y + tamaño_tablero_px):
+            return True
+        return False
+
     def handle_events(self, event, caretaker):
-        #Manejar eventos de teclado y mouse
         if event.type == MOUSEBUTTONDOWN:
-            if event.button == 1:
+            if event.button == 1:  # Click izquierdo
+                # Verificar si se hizo clic en algún botón de color
                 for boton in color_buttons:
                     if boton.checkForInput(event.pos):
                         Proxy.set_color(boton.get_color())
-                        break
-                caretaker.añadirMemento()
-                self.tableroJugador.manejar_evento(event, Proxy.get_color())
+                        return
 
+                # Verificar si se hizo clic en los botones de deshacer/rehacer
                 if DESHACER.checkForInput(event.pos):
                     caretaker.deshacer()
-                if REHACER.checkForInput(event.pos):
-                    caretaker.rehacer();
+                    return
+                elif REHACER.checkForInput(event.pos):
+                    caretaker.rehacer()
+                    return
+
+                # Verificar si el clic está dentro del tablero
+                if self.es_clic_valido(event.pos):
+                    caretaker.añadirMemento()
+                    self.tableroJugador.manejar_evento(event, Proxy.get_color())
 
             elif event.button == 3:  # Click derecho
-                caretaker.añadirMemento()
-                self.tableroJugador.manejar_evento(event, Color.WHITE.value)
+                if self.es_clic_valido(event.pos):  # Solo guardar memento si el clic fue válido
+                    caretaker.añadirMemento()
+                    self.tableroJugador.manejar_evento(event, Color.WHITE.value)
+
         if event.type == pygame.KEYDOWN:
-            """if event.key == pygame.K_d:
-                caretaker.deshacer()
-            elif event.key == pygame.K_r:
-                caretaker.rehacer()"""
             if event.key == pygame.K_a:
                 if self.ayudas > 0:
                     caretaker.añadirMemento()
-                    self.ayudas = self.ayudas - 1
+                    self.ayudas -= 1
                     self.ayuda()
                 else:
                     print("No hay más ayudas")
