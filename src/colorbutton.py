@@ -1,13 +1,15 @@
 import pygame
 class colorbutton:
-    def __init__(self, image, pos, color, size=(50, 50)):
-        self.image = image
+    def __init__(self, image_base, image_flotante, pos, color, size=(50, 50)):
+        self.image_base = image_base
+        self.image_flotante = image_flotante
         self.x_pos = pos[0]
         self.y_pos = pos[1]
         self.color = color
         self.size = size
-        self.image = pygame.transform.scale(self.image, self.size)
-        self.rect = self.image.get_rect(center=(self.x_pos, self.y_pos))
+        self.image_base = pygame.transform.scale(self.image_base, self.size)
+        self.image_flotante = pygame.transform.scale(self.image_flotante, self.size)
+        self.rect = self.image_base.get_rect(center=(self.x_pos, self.y_pos))
 
     def checkForInput(self, position) -> bool:
         # Comprobar si la posición del click está dentro del rectángulo del botón
@@ -19,7 +21,12 @@ class colorbutton:
         return self.color
 
     def draw(self, screen):
-        screen.blit(self.image, self.rect)
+        mouse_pos = pygame.mouse.get_pos()
+
+        if self.rect.collidepoint(mouse_pos):
+            screen.blit(self.image_flotante, self.rect)
+        else:
+            screen.blit(self.image_base, self.rect)
 
 """
 def main():
@@ -29,7 +36,7 @@ def main():
 
     # Crear un rectángulo de color inicial (rojo)
     initial_color = (255, 0, 0)
-    image = pygame.Surface((50, 50))  # Crear una superficie rectangular
+    image_base = pygame.Surface((50, 50))  # Crear una superficie rectangular
     image.fill(initial_color)  # Llenar el rectángulo con el color rojo
 
     # Crear el botón

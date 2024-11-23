@@ -10,18 +10,21 @@ from Proxy import Proxy
 import pygame
 
 color_buttons = [
-    colorbutton(image=pygame.image.load("assets/black.png"), pos=(1100, 50), color=Color.BLACK.value, size=(50, 50)),
-    colorbutton(image=pygame.image.load("assets/blue.png"), pos=(1160, 50), color=Color.BLUE.value, size=(50, 50)),
-    colorbutton(image=pygame.image.load("assets/brown.png"), pos=(1100, 110), color=Color.BROWN.value, size=(50, 50)),
-    colorbutton(image=pygame.image.load("assets/celeste.png"), pos=(1160, 110), color=Color.LIGHT_BLUE.value, size=(50, 50)),
-    colorbutton(image=pygame.image.load("assets/green.png"), pos=(1100, 170), color=Color.GREEN.value, size=(50, 50)),
-    colorbutton(image=pygame.image.load("assets/greenL.png"), pos=(1160, 170), color=Color.LIGHT_GREEN.value, size=(50, 50)),
-    colorbutton(image=pygame.image.load("assets/orange.png"), pos=(1100, 230), color=Color.ORANGE.value, size=(50, 50)),
-    colorbutton(image=pygame.image.load("assets/pink.png"), pos=(1160, 230), color=Color.PINK.value, size=(50, 50)),
-    colorbutton(image=pygame.image.load("assets/purple.png"), pos=(1100, 290), color=Color.PURPLE.value, size=(50, 50)),
-    colorbutton(image=pygame.image.load("assets/red.png"), pos=(1160, 290), color=Color.RED.value, size=(50, 50)),
-    colorbutton(image=pygame.image.load("assets/yellow.png"), pos=(1130, 350), color=Color.YELLOW.value, size=(50, 50)),
+    colorbutton(image_base=pygame.image.load("assets/black.png"), image_flotante = pygame.image.load("assets/black_flotante.png"),pos=(1100, 50), color=Color.BLACK.value, size=(50, 50)),
+    colorbutton(image_base=pygame.image.load("assets/blue.png"), image_flotante = pygame.image.load("assets/blue_flotante.png"),pos=(1160, 50), color=Color.BLUE.value, size=(50, 50)),
+    colorbutton(image_base=pygame.image.load("assets/brown.png"), image_flotante = pygame.image.load("assets/brown_flotante.png"),pos=(1100, 110), color=Color.BROWN.value, size=(50, 50)),
+    colorbutton(image_base=pygame.image.load("assets/celeste.png"), image_flotante = pygame.image.load("assets/celeste_flotante.png"),pos=(1160, 110), color=Color.LIGHT_BLUE.value, size=(50, 50)),
+    colorbutton(image_base=pygame.image.load("assets/green.png"), image_flotante = pygame.image.load("assets/green_flotante.png"),pos=(1100, 170), color=Color.GREEN.value, size=(50, 50)),
+    colorbutton(image_base=pygame.image.load("assets/greenL.png"),image_flotante = pygame.image.load("assets/greenL_flotante.png"), pos=(1160, 170), color=Color.LIGHT_GREEN.value, size=(50, 50)),
+    colorbutton(image_base=pygame.image.load("assets/orange.png"), image_flotante = pygame.image.load("assets/orange_flotante.png"),pos=(1100, 230), color=Color.ORANGE.value, size=(50, 50)),
+    colorbutton(image_base=pygame.image.load("assets/pink.png"), image_flotante = pygame.image.load("assets/pink_flotante.png"),pos=(1160, 230), color=Color.PINK.value, size=(50, 50)),
+    colorbutton(image_base=pygame.image.load("assets/purple.png"), image_flotante = pygame.image.load("assets/purple_flotante.png"),pos=(1100, 290), color=Color.PURPLE.value, size=(50, 50)),
+    colorbutton(image_base=pygame.image.load("assets/red.png"), image_flotante = pygame.image.load("assets/red_flotante.png"),pos=(1160, 290), color=Color.RED.value, size=(50, 50)),
+    colorbutton(image_base=pygame.image.load("assets/yellow.png"), image_flotante = pygame.image.load("assets/yellow_flotante.png"),pos=(1130, 350), color=Color.YELLOW.value, size=(50, 50)),
 ]
+n = 80
+DESHACER = colorbutton(image_base=pygame.image.load("assets/deshacer.png"), image_flotante = pygame.image.load("assets/deshacer.png"),pos=(1050, 600), color=None, size=(n, n))
+REHACER = colorbutton(image_base=pygame.image.load("assets/rehacer.png"), image_flotante = pygame.image.load("assets/rehacer.png"),pos=(1150, 600), color=None, size=(n, n))
 
 class GestorJuego:
 
@@ -156,6 +159,8 @@ class GestorJuego:
     def draw(self, screen):
         for boton in color_buttons:
             boton.draw(screen)
+        DESHACER.draw(screen)
+        REHACER.draw(screen)
 
         tamañoCasilla = self.tamañoCasilla
         desfase_x = 300
@@ -204,15 +209,20 @@ class GestorJuego:
                 caretaker.añadirMemento()
                 self.tableroJugador.manejar_evento(event, Proxy.get_color())
 
+                if DESHACER.checkForInput(event.pos):
+                    caretaker.deshacer()
+                if REHACER.checkForInput(event.pos):
+                    caretaker.rehacer();
+
             elif event.button == 3:  # Click derecho
                 caretaker.añadirMemento()
                 self.tableroJugador.manejar_evento(event, Color.WHITE.value)
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_d:
+            """if event.key == pygame.K_d:
                 caretaker.deshacer()
             elif event.key == pygame.K_r:
-                caretaker.rehacer()
-            elif event.key == pygame.K_a:
+                caretaker.rehacer()"""
+            if event.key == pygame.K_a:
                 if self.ayudas > 0:
                     caretaker.añadirMemento()
                     self.ayudas = self.ayudas - 1
