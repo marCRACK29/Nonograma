@@ -26,10 +26,13 @@ class HP_counter:
         #self.noheartImage = pygame.transform.scale(image,(image.get_width()*self.scale,image.get_height()*self.scale))
 
     def draw(self, surface) -> None:
-        imageToDraw = self.heartImage #the image that we will draw will depend on how many hearts there are left
+        imageToDraw = self.heartImage  # the image that we will draw will depend on how many hearts there are left
         for i in range(self.maxLives):
-            if i==self.lives: imageToDraw = self.noheartImage
-            surface.blit(imageToDraw, (self.pos[0] + imageToDraw.get_width()*i, self.pos[1]))
+            if i == self.lives:
+                imageToDraw = self.noheartImage
+            x_offset = (i % 8) * imageToDraw.get_width()
+            y_offset = (i // 8) * imageToDraw.get_height()
+            surface.blit(imageToDraw, (self.pos[0] + x_offset, self.pos[1] + y_offset))
 
 """
 def main():
