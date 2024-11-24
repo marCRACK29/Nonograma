@@ -24,6 +24,7 @@ class Caretaker:
             self.gestor.cargar_estado(m)
             self.guardar()
         else:
+            self.redo_stack.append(self.gestor.guardar_estado())
             self.gestor.cargar_estado(copy.deepcopy(self.EstadoBase))
 
     def rehacer(self):
