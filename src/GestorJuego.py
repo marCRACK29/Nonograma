@@ -90,7 +90,7 @@ class GestorJuego:
             for j in range(self.tamañoTablero):
                 color_objetivo = self.tableroObjetivo.getCasillas()[i][j].get_color()
                 color_jugador = self.tableroJugador.getCasillas()[i][j].get_color()
-                if color_objetivo != Color.WHITE.value and color_jugador == Color.WHITE.value:
+                if color_objetivo != color_jugador:
                     self.tableroJugador.getCasillas()[i][j].set_color(color_objetivo)
                     return
 
