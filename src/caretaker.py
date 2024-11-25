@@ -1,3 +1,4 @@
+import copy
 import os
 import pickle
 
@@ -11,16 +12,20 @@ class Caretaker:
         self.ruta_guardado = None
         self.undo_stack = []
         self.redo_stack = []
+        self.EstadoBase = None
 
     def deshacer(self):
-        if len(self.undo_stack) > 1:
+        if len(self.undo_stack) >= 1:
             # Guardar el estado actual en la pila de rehacer
             self.redo_stack.append(self.gestor.guardar_estado())
             # Cargar el último memento
             m = self.undo_stack.pop()
+            self.mementos.append(m)
             self.gestor.cargar_estado(m)
+            self.guardar()
         else:
-            print("No hay más estados para deshacer")
+            self.redo_stack.append(self.gestor.guardar_estado())
+            self.gestor.cargar_estado(copy.deepcopy(self.EstadoBase))
 
     def rehacer(self):
         if self.redo_stack:
@@ -28,7 +33,9 @@ class Caretaker:
             self.undo_stack.append(self.gestor.guardar_estado())
             # Cargar el último memento de rehacer
             m = self.redo_stack.pop()
+            self.mementos.append(m)
             self.gestor.cargar_estado(m)
+            self.guardar()
 
     def borrarPartida(self):
         try:
@@ -100,9 +107,10 @@ class Caretaker:
                 self.gestor.pistasFilas()
                 self.gestor.pistasColumnas()
                 m = self.gestor.guardar_estado()
-                self.mementos.append(m)  # Se agrega memento al stack de mementos
-                self.undo_stack.append(m)  # Se agrega memento al stack de undo
-                self.redo_stack.clear()
+                self.EstadoBase = m
+                #self.mementos.append(m)  # Se agrega memento al stack de mementos
+                #self.undo_stack.append(m)  # Se agrega memento al stack de undo
+               # self.redo_stack.clear()
 
         except FileNotFoundError:
             print("¡ERROR! El archivo de guardado no se encontró.")
@@ -134,10 +142,10 @@ class Caretaker:
             with open(ruta_cargado, "rb") as archivo:
                 m = pickle.load(archivo)
                 self.gestor.cargar_objetivo(m)
-                m = self.gestor.guardar_estado()
-                self.mementos.append(m)  # Se agrega memento al stack de mementos
-                self.undo_stack.append(m)  # Se agrega memento al stack de undo
-                self.redo_stack.clear()
+                self.EstadoBase = self.gestor.guardar_estado()
+                #self.mementos.append(m)  # Se agrega memento al stack de mementos
+                #self.undo_stack.append(m)  # Se agrega memento al stack de undo
+                #self.redo_stack.clear()
 
         except Exception as e:
             print(f"\n¡ERROR al cargar objetivo!: {str(e)}")

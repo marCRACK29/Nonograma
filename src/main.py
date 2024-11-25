@@ -1,3 +1,5 @@
+from math import ceil
+
 import pygame, sys
 from button import Button
 from GestorJuego import GestorJuego
@@ -64,7 +66,7 @@ def continuar_partida():
 def play(tamaño, ruta_nonograma):
     gestor_juego = GestorJuego(tamaño) # Crear un gestor de juego con el tamaño del nonograma seleccionado
     if True:  # TODO: reemplazar por logica de "si se va a jugar con vidas"
-        cantidad_vidas = 3
+        cantidad_vidas = ceil(tamaño / 2)
         vidas = HP_counter(cantidad_vidas)
         gestor_juego.contadorVidas = vidas
         gestor_juego.numVidas = vidas.lives
