@@ -137,28 +137,59 @@ def win():
                     main_menu()
 
         pygame.display.update()
-
+def cargar_contenido_tutorial():
+    with open("tutorial_text.txt",'r',encoding='utf-8') as file:
+        content = file.read()
+        pages = [page.strip().split('</title>', 1) for page in content.split("</page>")]
+        return pages
 # Ventana donde se muestra el tutorial
 def tutorial():
+    # Botones para navegar entre páginas
+    FLECHA_IZQUIERDA = Button(image=None, pos=(100, 360),
+                              text_input="<", font=get_font(75),
+                              base_color="White", color_flotante="Green")
+    FLECHA_DERECHA = Button(image=None, pos=(1180, 360),
+                            text_input=">", font=get_font(75),
+                            base_color="White", color_flotante="Green")
+
+    TUTORIAL_BACK = Button(image=None, pos=(640, 580),
+                           text_input="BACK", font=get_font(35), base_color="White", color_flotante="Green")
+    TUTORIAL_PLAY = Button(image=None, pos=(640, 620),
+                           text_input="IR A JUGAR", font=get_font(35), base_color="White", color_flotante="Green")
+    TUTORIAL_CREACION = Button(image=None, pos=(640, 660),
+                               text_input="IR A CREACION", font=get_font(35), base_color="White",
+                               color_flotante="Green")
+
+    pagina_actual = 0
+    #paginas_tutorial estan guardadas de la forma [[titulo1,contenido1],[titulo2,contenido2]...etc]
+    paginas_tutorial = cargar_contenido_tutorial()
+
     while True:
         TUTORIAL_MOUSE_POS = pygame.mouse.get_pos()
 
         SCREEN.fill("black")
 
-        TUTORIAL_TEXT = get_font(45).render("Tutorial", True, "White")
-        TUTORIAL_RECT = TUTORIAL_TEXT.get_rect(midtop=(640, 100))
-        SCREEN.blit(TUTORIAL_TEXT, TUTORIAL_RECT)
+        TUTORIAL_TITLE = get_font(40).render(paginas_tutorial[pagina_actual][0], True, "White")
+        TUTORIAL_RECT = TUTORIAL_TITLE.get_rect(midtop=(640, 30))
 
-        TUTORIAL_BACK = Button(image=None, pos=(640, 460),
-                               text_input="BACK", font=get_font(75), base_color="White", color_flotante="Green")
-        TUTORIAL_PLAY = Button(image=None, pos=(640, 560),
-                               text_input="IR A JUGAR", font=get_font(75), base_color="White", color_flotante="Green")
-        TUTORIAL_CREACION = Button(image=None, pos=(640, 660),
-                                 text_input="IR A CREACION", font=get_font(75), base_color="White", color_flotante="Green")
+        TUTORIAL_TITLE_BODY_TEXT = get_font(25).render(paginas_tutorial[pagina_actual][1], True, "White")
+        TUTORIAL_RECT_BODY = TUTORIAL_TITLE.get_rect(topleft=(200, 100))
+
+        SCREEN.blit(TUTORIAL_TITLE, TUTORIAL_RECT)
+        SCREEN.blit(TUTORIAL_TITLE_BODY_TEXT, TUTORIAL_RECT_BODY)
 
         for button in [TUTORIAL_BACK, TUTORIAL_PLAY, TUTORIAL_CREACION]:
             button.changeColor(TUTORIAL_MOUSE_POS)
             button.update(SCREEN)
+
+        if pagina_actual != 0:
+            FLECHA_IZQUIERDA.changeColor(TUTORIAL_MOUSE_POS)
+            FLECHA_IZQUIERDA.update(SCREEN)
+
+        if pagina_actual != len(paginas_tutorial)-1:
+            FLECHA_DERECHA.changeColor(TUTORIAL_MOUSE_POS)
+            FLECHA_DERECHA.update(SCREEN)
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -170,7 +201,11 @@ def tutorial():
                 if TUTORIAL_PLAY.checkForInput(TUTORIAL_MOUSE_POS):
                     catalogo()
                 if TUTORIAL_CREACION.checkForInput(TUTORIAL_MOUSE_POS):
-                    creacion()
+                    elegir_tamaño_creacion()
+                if FLECHA_IZQUIERDA.checkForInput(TUTORIAL_MOUSE_POS):
+                    pagina_actual -= 1
+                if FLECHA_DERECHA.checkForInput(TUTORIAL_MOUSE_POS):
+                    pagina_actual += 1
 
         pygame.display.update()
 
