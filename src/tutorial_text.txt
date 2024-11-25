@@ -1,0 +1,90 @@
+Que es un nonograma?</title>
+Un nonograma, también conocido como
+Hanjie, Picross o Griddlers, es un 
+puzzle logico en el rellenas celdas 
+para revelar una imagen oculta.
+
+     2     3           2     3
+    +--+--+--+        +--+--+--+ 
+1 1 |  |  |  |    1 1 |@@|  |@@|
+    +--+--+--+        +--+--+--+
+  3 |  |  |  | ->   3 |@@|@@|@@|
+    +--+--+--+        +--+--+--+
+  1 |  |  |  |      1 |  |  |@@|
+    +--+--+--+        +--+--+--+ 
+</page>
+Reglas basicas</title>
+Cada fila y columna tiene numeros a
+los lados que te dan pistas acerca
+de como rellenar las celdas. Cada
+numero representa una seccion
+de celdas consecutivas del mismo
+color. EL valor del numero te
+dice cuantas celdas consecutivas
+hay.
+</page>
+Ejemplo 1</title>
+Por ejemplo, si tuvieras una fila
+de 5 casillas, y una pista que dice
+5, entonces sabes que toda la fila
+va a ser un bloque continuo de ese
+color.
+
+          +--+--+--+--+--+
+        5 |  |  |  |  |  |
+          +--+--+--+--+--+
+                 ->
+          +--+--+--+--+--+
+        5 |@@|@@|@@|@@|@@|
+          +--+--+--+--+--+
+</page>
+Ejemplo 2</title>
+Si tuvieras dos secciones del
+mismo color, sabes que no pueden
+ser contiguas.
+          +--+--+--+--+--+
+      2 2 |  |  |  |  |  |
+          +--+--+--+--+--+
+                 ->
+          +--+--+--+--+--+
+      2 2 |@@|@@|  |@@|@@|
+          +--+--+--+--+--+
+</page>
+El orden importa</title>
+El orden en el que aparecen los
+numeros te dice el orden en el
+que van a estar las secciones.
+
+            Si tuvieras
+          +--+--+--+--+--+
+      3 1 |  |  |  |  |  |
+          +--+--+--+--+--+
+        la respuesta seria:
+          +--+--+--+--+--+
+      3 1 |@@|@@|@@|  |@@|
+          +--+--+--+--+--+
+          
+           No seria esto!:
+          +--+--+--+--+--+
+      3 1 |@@|  |@@|@@|@@|
+          +--+--+--+--+--+
+</page>
+Solucion unica</title>
+Cada Nonograma tiene una solucion
+unica. Esto significa que para cada
+tablero, solo existe una unica
+manera de rellenar las casillas
+tal que se satisfagan todas las pistas
+
+</page>
+Vidas</title>
+Para evitar situaciones en las que
+te das cuenta que cometiste un
+error despues de avanzar harto
+una partida, el momento en el
+que cometas un error, el juego te
+avisara. Pero tambien perderas una
+vida. Si te quedas sin vidas tendras
+que volver a empezar, asi que solo
+rellena una casilla si tienes certeza!
+
