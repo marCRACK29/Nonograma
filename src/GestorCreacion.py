@@ -25,8 +25,8 @@ color_buttons = [
 
 # Botones de deshacer y rehacer
 n = 80
-DESHACER = ColorButton(image_base=pygame.image.load("assets/deshacer.png"), image_flotante = pygame.image.load("assets/deshacer.png"), pos=(1050, 450), color=None, size=(n, n))
-REHACER = ColorButton(image_base=pygame.image.load("assets/rehacer.png"), image_flotante = pygame.image.load("assets/rehacer.png"), pos=(1150, 450), color=None, size=(n, n))
+DESHACER = ColorButton(image_base=pygame.image.load("assets/deshacer.png"), image_flotante = pygame.image.load("assets/deshacer.png"), pos=(1050, 460), color=None, size=(n, n))
+REHACER = ColorButton(image_base=pygame.image.load("assets/rehacer.png"), image_flotante = pygame.image.load("assets/rehacer.png"), pos=(1150, 460), color=None, size=(n, n))
 
 # Clase que se encarga de la creación de un nonograma, proporcionando las herramientas necesarias
 class GestorCreacion:
