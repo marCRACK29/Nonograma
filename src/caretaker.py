@@ -4,7 +4,7 @@ import pickle
 
 from vidas import HP_counter
 
-
+# Clase Caretaker que se encarga de guardar y cargar los mementos en memoria
 class Caretaker:
     def __init__(self, gestor):
         self.gestor = gestor
@@ -14,6 +14,7 @@ class Caretaker:
         self.redo_stack = []
         self.EstadoBase = None
 
+    # Metodo para deshacer la última acción realizada (en este caso, descolorear una celda)
     def deshacer(self):
         if len(self.undo_stack) >= 1:
             # Guardar el estado actual en la pila de rehacer
@@ -27,6 +28,7 @@ class Caretaker:
             self.redo_stack.append(self.gestor.guardar_estado())
             self.gestor.cargar_estado(copy.deepcopy(self.EstadoBase))
 
+    # Metodo para rehacer la última acción deshecha (en este caso, recolorear una celda)
     def rehacer(self):
         if self.redo_stack:
             # Guardar el estado actual en la pila de deshacer
@@ -37,6 +39,7 @@ class Caretaker:
             self.gestor.cargar_estado(m)
             self.guardar()
 
+    # Metodo para borrar la partida guardada en memoria
     def borrarPartida(self):
         try:
             ruta_guardado = os.path.join(os.path.dirname(__file__), "guardadoPartida", "partidaGuardada.pkl")
@@ -48,6 +51,7 @@ class Caretaker:
         except Exception as e:
             print(f"Error al intentar borrar la partida: {str(e)}")
 
+    # Metodo que pide los memenntos a Gestor(creacion o juego) y los guarda en memoria
     def añadirMemento(self):
         m = self.gestor.guardar_estado()
         self.mementos.append(m)  #Se agrega memento al stack de mementos
@@ -77,7 +81,7 @@ class Caretaker:
             import traceback
             traceback.print_exc()
 
-    #Este metodo para cargar la ultima partida jugada en memoria
+    # Metodo para cargar la última partida jugada en memoria
     def cargarPartida(self):
         try:
             gestor_type = type(self.gestor).__name__
@@ -108,9 +112,6 @@ class Caretaker:
                 self.gestor.pistasColumnas()
                 m = self.gestor.guardar_estado()
                 self.EstadoBase = m
-                #self.mementos.append(m)  # Se agrega memento al stack de mementos
-                #self.undo_stack.append(m)  # Se agrega memento al stack de undo
-               # self.redo_stack.clear()
 
         except FileNotFoundError:
             print("¡ERROR! El archivo de guardado no se encontró.")
@@ -119,7 +120,7 @@ class Caretaker:
             import traceback
             traceback.print_exc()
 
-    #Metodo que permite guardar en catalogo el nonograma creado por usuario
+    # Metodo que permite guardar en catálogo el nonograma creado por usuario
     def añadir_en_catalogo(self, tamaño, nombre):
         carpeta = ""
         if(tamaño == 10):
@@ -133,8 +134,7 @@ class Caretaker:
         with open(ruta_catalogo, "wb") as archivo:
             pickle.dump(self.mementos[-1], archivo)
 
-
-    #metodo que permite cargar un nonograma Objetivo para poder jugar
+    # Metodo que permite cargar un nonograma Objetivo para poder jugar
     def cargarObjetivo(self, ruta_cargado):
         try:
             print(f"Intentando cargar desde: {ruta_cargado}")
@@ -143,9 +143,6 @@ class Caretaker:
                 m = pickle.load(archivo)
                 self.gestor.cargar_objetivo(m)
                 self.EstadoBase = self.gestor.guardar_estado()
-                #self.mementos.append(m)  # Se agrega memento al stack de mementos
-                #self.undo_stack.append(m)  # Se agrega memento al stack de undo
-                #self.redo_stack.clear()
 
         except Exception as e:
             print(f"\n¡ERROR al cargar objetivo!: {str(e)}")

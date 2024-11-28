@@ -1,3 +1,4 @@
+import pytest
 from src.vidas import *
 
 def test_createHealthCounter():

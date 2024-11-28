@@ -1,15 +1,16 @@
 import pygame
 import pygame_gui
 
+# Clase que permite ingresar texto en una ventana
 class Text_box():
     def __init__(self,screen,xy=(100,300),wh=(600,50)):
         """
         :param screen : Surface
-            the screen the text box will be in
-        :param xy: (int,int)
-            tuple with x and y coordinates of the text box
-        :param wh: (int,int)
-            tuple with width and height of the text box
+            La pantalla en la que estará el cuadro de texto.
+        :param xy: (int, int)
+            Tupla con las coordenadas x e y del cuadro de texto.
+        :param wh: (int, int)
+            Tupla con el ancho y la altura del cuadro de texto.
         """
         self.screen = screen
         self.manager = pygame_gui.UIManager((screen.width,screen.height))
@@ -21,18 +22,26 @@ class Text_box():
             text='Guardar',
             manager=self.manager
         )
+
+    # Establecer el texto del cuadro de texto
     def setText(self,value):
         self._textBox.set_text(value)
+
+    # Obtener el texto ingresado
     def getText(self):
         return self._textBox.get_text()
+
+    # Procesar eventos (como clicks de mouse) en la interfaz
     def process_events(self, event):
         self.manager.process_events(event)
+
+    # Dibujar el cuadro de texto
     def draw(self):
         self.manager.update(self.clock.tick()/1000.0)
         self.manager.draw_ui(self.screen)
 
-    def check_button(self):
-        """Verifica si se presiona el botón de guardar."""
+    # Verificar si se presiona el botón de guardar
+    def check_button(self) -> bool:
         for event in pygame.event.get():
             if event.type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == self.save_button:
@@ -40,34 +49,3 @@ class Text_box():
                     print(f"Texto guardado: {self.texto_guardado}")  # Imprime el texto guardado
                     return True  # Indica que se debe cerrar la ventana
         return False  # No se debe cerrar la ventana
-
-""""
-def main():
-    pygame.init()
-    screen = pygame.display.set_mode((800, 600))
-    pygame.display.set_caption("text_input_demo")
-
-    entrada = Text_box(screen) #<---
-    #entrada = Text_box(screen,(100,300),(600,50)) #<---
-
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                return
-            entrada.process_events(event) #<---
-        if entrada.check_button():  # Verifica si se presionó Enter o el botón
-            pygame.quit()  # Cierra la ventana
-            return
-        screen.fill("blue")
-
-        entrada.draw() #<---
-
-        new_text = pygame.font.SysFont("calibri", 50).render(f"text: {entrada.getText()}", True, "black")
-        new_text_rect = new_text.get_rect(center=(screen.width/2, screen.height*2/3))
-        screen.blit(new_text, new_text_rect)
-        pygame.display.update()
-
-if __name__ == '__main__':
-    main()
-"""""

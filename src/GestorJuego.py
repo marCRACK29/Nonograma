@@ -1,14 +1,14 @@
+import pygame
 import math
 
 from pygame import MOUSEBUTTONDOWN
-
 from colorbutton import colorbutton
-from memento import mementoJuego, mementoCreacion
+from memento import mementoJuego
 from tablero import Tablero
 from Color import Color
 from Proxy import Proxy
-import pygame
 
+# Gama de colorbutton's que se presentan en la pantalla al momento de jugar con un nonograma
 color_buttons = [
     colorbutton(image_base=pygame.image.load("assets/black.png"), image_flotante = pygame.image.load("assets/black_flotante.png"),pos=(1100, 50), color=Color.BLACK.value, size=(50, 50)),
     colorbutton(image_base=pygame.image.load("assets/blue.png"), image_flotante = pygame.image.load("assets/blue_flotante.png"),pos=(1160, 50), color=Color.BLUE.value, size=(50, 50)),
@@ -22,12 +22,14 @@ color_buttons = [
     colorbutton(image_base=pygame.image.load("assets/red.png"), image_flotante = pygame.image.load("assets/red_flotante.png"),pos=(1160, 290), color=Color.RED.value, size=(50, 50)),
     colorbutton(image_base=pygame.image.load("assets/yellow.png"), image_flotante = pygame.image.load("assets/yellow_flotante.png"),pos=(1130, 350), color=Color.YELLOW.value, size=(50, 50)),
 ]
+
+# Botones de deshacer y rehacer
 n = 80
 DESHACER = colorbutton(image_base=pygame.image.load("assets/deshacer.png"), image_flotante = pygame.image.load("assets/deshacer.png"),pos=(1050, 600), color=None, size=(n, n))
 REHACER = colorbutton(image_base=pygame.image.load("assets/rehacer.png"), image_flotante = pygame.image.load("assets/rehacer.png"),pos=(1150, 600), color=None, size=(n, n))
 
+# Clase que muestra un nonograma almacenado y gestiona las interacciones del jugador con el mismo
 class GestorJuego:
-
     def __init__(self, tamañoTablero):
         self.numeritosFilas = []
         self.numeritosColumnas = []
@@ -36,10 +38,11 @@ class GestorJuego:
         self.tableroObjetivo = Tablero(tamañoTablero, self.tamañoCasilla )
         self.tableroJugador = Tablero(tamañoTablero, self.tamañoCasilla)
         self.ayudas = None
-        self.contadorVidas = None #contador de vidas se setea externamente si se va a jugar con vidas, es un HP_counter
-        self.numVidas = None #numero de vidas iniciales, es un entero
+        self.contadorVidas = None # Contador de vidas se setea externamente si se va a jugar con vidas, es un HP_counter
+        self.numVidas = None # Número de vidas iniciales, es un entero
 
-    def nonogramaFinalizado(self):
+    # Metodo que verifica si el nonograma ha sido completado
+    def nonogramaFinalizado(self) -> bool:
         for i in range(self.tamañoTablero):
             for j in range(self.tamañoTablero):
                 color_objetivo = self.tableroObjetivo.getCasillas()[i][j].get_color()
@@ -48,17 +51,19 @@ class GestorJuego:
                     return False
         return True
 
+    # Metodo que setea el contador de vidas
     def setearAyudas(self, ayudas):
         if self.ayudas is None:
             self.ayudas = ayudas
         else:
             pass
 
-
-    def guardar_estado(self):
+    # Metodo que guarda el estado actual del juego en un memento
+    def guardar_estado(self) -> mementoJuego:
         m = mementoJuego(self.tableroJugador, self.tableroObjetivo, self.contadorVidas.lives, self.ayudas)
         return m
 
+    # Metodo que restaura el estado del juego usando un memento pasado como parámetro
     def cargar_estado(self, memento):
         tableros_cargados = memento.get_state()
         if isinstance(tableros_cargados, tuple):
@@ -72,8 +77,7 @@ class GestorJuego:
         self.tamañoTablero = self.tableroObjetivo.tamaño
         self.tamañoCasilla = self.tableroJugador.tamañoCasilla
 
-
-    #Metodo que permite cargar un tablero objetivo usando un mementoCreacion
+    # Metodo que permite cargar un tablero objetivo usando un mementoCreacion
     def cargar_objetivo(self, memento):
         tablero_cargado = memento.get_state()
         if isinstance(tablero_cargado, tuple):
@@ -84,7 +88,7 @@ class GestorJuego:
         self.pistasFilas()
         self.setearAyudas(3)
 
-    #Metodo que pinta una casilla correcta para ayudar al jugador
+    # Metodo que pinta una casilla correcta para ayudar al jugador
     def ayuda(self):
         for i in range(self.tamañoTablero):
             for j in range(self.tamañoTablero):
@@ -94,7 +98,7 @@ class GestorJuego:
                     self.tableroJugador.getCasillas()[i][j].set_color(color_objetivo)
                     return
 
-    #Metodo que verifica que la última casilla pintada haya sido correcta
+    # Metodo que verifica que la última casilla pintada haya sido correcta
     def comprobar(self, i, j, color):
         colorJugador = color
         colorObjetivo = self.tableroObjetivo.getCasillas()[i][j].get_color()
@@ -105,7 +109,7 @@ class GestorJuego:
             if self.contadorVidas is not None:
                 self.contadorVidas.loseLife()
 
-    #Metodo para determinar pistas numéricas paras las filas dado un nonograma Objetivo
+    # Metodo para determinar pistas numéricas paras las filas dado un nonograma Objetivo
     def pistasFilas(self):
         casillas = self.tableroObjetivo.getCasillas() #obtiene una lista de casillas del tablero objetivo.
         numeritosFilas = [] # crea una lista para almacenar secuencias de color y tamaño para cada fila.
@@ -155,9 +159,11 @@ class GestorJuego:
             numeritosColumnas.append(datos_aux)
         self.numeritosColumnas = numeritosColumnas #Se guarda como valor de la clase
 
+    # Metodo que dibuja los elementos en pantalla
     def draw(self, screen):
         for boton in color_buttons:
             boton.draw(screen)
+
         DESHACER.draw(screen)
         REHACER.draw(screen)
 
@@ -197,7 +203,8 @@ class GestorJuego:
         ayudas_render = fuente.render(ayudas_text, True, (0, 0, 0))  # Color negro
         screen.blit(ayudas_render, (900, desfase_y - 50))  # Posición encima del tablero
 
-    def es_clic_valido(self, pos):
+    # Metodo que verifica si el clic se encuentra dentro del tablero
+    def es_clic_valido(self, pos) -> bool:
         # Calcula las coordenadas del tablero
         desfase_x = 300
         desfase_y = 165
@@ -212,6 +219,7 @@ class GestorJuego:
             return True
         return False
 
+    # Metodo que maneja los eventos del teclado y mouse
     def handle_events(self, event, caretaker):
         if event.type == MOUSEBUTTONDOWN:
             if event.button == 1:  # Click izquierdo
@@ -253,34 +261,3 @@ class GestorJuego:
 
         if event.type == pygame.USEREVENT:
             self.comprobar(event.fila, event.columna, event.color)
-
-
-"""
-def main():
-    from src.caretaker import Caretaker
-    pygame.init()
-    screen = pygame.display.set_mode((1000, 1000))
-    pygame.display.set_caption("gestor")
-
-    gestor = GestorJuego(10, 50)
-    caretaker = Caretaker(gestor)
-    caretaker.cargarObjetivo()  # Cargar el tablero objetivo al inicio
-
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                return
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_s:
-                    caretaker.añadirMemento()
-
-            gestor.handle_events(event, caretaker)
-
-        gestor.draw(screen)
-        pygame.display.flip()
-
-
-if __name__ == '__main__':
-    main()
-"""
