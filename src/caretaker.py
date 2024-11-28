@@ -21,12 +21,14 @@ class Caretaker:
             self.redo_stack.append(self.gestor.guardar_estado())
             # Cargar el último memento
             m = self.undo_stack.pop()
-            self.mementos.append(m)
             self.gestor.cargar_estado(m)
+            self.mementos.append(self.gestor.guardar_estado())
             self.guardar()
         else:
             self.redo_stack.append(self.gestor.guardar_estado())
             self.gestor.cargar_estado(copy.deepcopy(self.EstadoBase))
+            self.mementos.append(self.gestor.guardar_estado())
+            self.guardar()
 
     # Metodo para rehacer la última acción deshecha (en este caso, recolorear una celda)
     def rehacer(self):
