@@ -8,9 +8,9 @@ class HP_counter:
         self.scale = 4
         self.pos = (900,30)
         self.lives = maxLives
-        self.heartImage = pygame.image.load(os.path.join("assets", "heart.png"))
-        self.noheartImage = pygame.image.load(os.path.join("assets", "noHeart.png"))
-
+        src = os.path.dirname(os.path.abspath(__file__))
+        self.heartImage = pygame.image.load(os.path.join(src,"assets", "heart.png"))
+        self.noheartImage = pygame.image.load(os.path.join(src,"assets", "noHeart.png"))
     # Resta una vida
     def loseLife(self):
         self.lives -= 1

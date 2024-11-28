@@ -211,8 +211,10 @@ def tutorial():
                     elegir_tamaño_creacion()
                 if FLECHA_IZQUIERDA.checkForInput(TUTORIAL_MOUSE_POS):
                     pagina_actual -= 1
+                    if pagina_actual<0: pagina_actual += 1
                 if FLECHA_DERECHA.checkForInput(TUTORIAL_MOUSE_POS):
                     pagina_actual += 1
+                    if pagina_actual >= len(paginas_tutorial): pagina_actual -= 1
 
         pygame.display.update()
 

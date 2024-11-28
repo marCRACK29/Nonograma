@@ -40,6 +40,7 @@ class GestorJuego:
         self.ayudas = None
         self.contadorVidas = None # Contador de vidas se setea externamente si se va a jugar con vidas, es un HP_counter
         self.numVidas = None # Número de vidas iniciales, es un entero
+        Proxy.set_color(Color.BLACK.value)
 
     # Metodo que verifica si el nonograma ha sido completado
     def nonogramaFinalizado(self) -> bool:
