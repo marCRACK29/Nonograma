@@ -106,10 +106,10 @@ def play(tamaño, ruta_nonograma):
                 # Dibujar el tablero de juego en la pantalla
         if not gestor_juego.contadorVidas.alive():
             caretaker.borrarPartida()
-            main_menu()
+            sin_vidas(tamaño, ruta_nonograma) # Mostrar ventana de perder
         if gestor_juego.nonogramaFinalizado():
             caretaker.borrarPartida()
-            win()
+            win() # Mostrar ventana de ganar
 
         gestor_juego.draw(SCREEN)
         pygame.display.update() #
@@ -579,6 +579,43 @@ def confirmar_eliminacion(nonograma):
 
         pygame.display.update()
 
+# Ventana que se muestra al perder todas las vidas
+def sin_vidas(tamaño, ruta_nonograma):
+    while True:
+        SCREEN.fill("black")
+
+        # Mensaje
+        CONFIRM_TEXT = get_font(45).render(f"Perdiste", True, "White")
+        CONFIRM_RECT = CONFIRM_TEXT.get_rect(center=(640, 200))
+        SCREEN.blit(CONFIRM_TEXT, CONFIRM_RECT)
+
+        # Botones "Volver al Menú" y "Volver a jugar"
+        MENU_BUTTON = Button(image=None, pos=(640, 400),
+                           text_input="Volver al Menú", font=get_font(50),
+                           base_color="Green", color_flotante="White")
+        JUGAR_BUTTON = Button(image=None, pos=(640, 500),
+                           text_input="Volver a jugar", font=get_font(50),
+                           base_color="Green", color_flotante="White")
+
+        MOUSE_POS = pygame.mouse.get_pos()
+
+        for button in [MENU_BUTTON, JUGAR_BUTTON]:
+            button.changeColor(MOUSE_POS)
+            button.update(SCREEN)
+
+        # Manejo de eventos
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if MENU_BUTTON.checkForInput(MOUSE_POS):
+                    main_menu() # Volver al menú principal
+                if JUGAR_BUTTON.checkForInput(MOUSE_POS):
+                    play(tamaño, ruta_nonograma) # Volver a jugar
+
+        pygame.display.update()
+
 # Ventana principal del menú, la primera en mostrarse y la que tiene "enlaces" a las demás ventanas
 def main_menu():
     while True:
@@ -593,23 +630,23 @@ def main_menu():
         # Botones del menú principal
         if saved_game_exists:
             CONTINUAR_BUTTON = Button(image=None, pos=(300, 250),
-                                      text_input="CONTINUAR", font=get_font(50), base_color="#d7fcd4",
+                                      text_input="CONTINUAR", font=get_font(50), base_color="White",
                                       color_flotante="White")
 
         CATALOGO_BUTTON = Button(image=None, pos=(300, 350),
-                                 text_input="JUGAR", font=get_font(50), base_color="#d7fcd4", color_flotante="White")
+                                 text_input="JUGAR", font=get_font(50), base_color="White", color_flotante="Green")
 
         ELIMINAR_BUTTON = Button(image=None, pos=(1000, 650),
-                                 text_input="ELIMINAR", font=get_font(50), base_color="#d7fcd4", color_flotante="Red")
+                                 text_input="ELIMINAR", font=get_font(50), base_color="White", color_flotante="Red")
 
         CREACION_BUTTON = Button(image=None, pos=(300, 450),
-                                 text_input="CREACION", font=get_font(50), base_color="#d7fcd4", color_flotante="White")
+                                 text_input="CREACION", font=get_font(50), base_color="White", color_flotante="Green")
 
         TUTORIAL_BUTTON = Button(image=None, pos=(300, 550),
-                                 text_input="TUTORIAL", font=get_font(50), base_color="#d7fcd4", color_flotante="White")
+                                 text_input="TUTORIAL", font=get_font(50), base_color="White", color_flotante="Green")
 
         QUIT_BUTTON = Button(image=None, pos=(300, 650),
-                             text_input="QUIT", font=get_font(50), base_color="#d7fcd4", color_flotante="White")
+                             text_input="QUIT", font=get_font(50), base_color="White", color_flotante="Green")
 
         SCREEN.blit(MENU_TEXT, MENU_RECT)  # Dibujar el título en la pantalla
 
