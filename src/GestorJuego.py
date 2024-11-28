@@ -250,12 +250,12 @@ class GestorJuego:
                 # Verificar si el clic está dentro del tablero
                 if self.es_clic_valido(event.pos):
                     self.tableroJugador.manejar_evento(event, Proxy.get_color())
-                    caretaker.añadirMemento()
+                    #caretaker.añadirMemento()
 
             elif event.button == 3:  # Click derecho
                 if self.es_clic_valido(event.pos):  # Solo guardar memento si el clic fue válido
                     self.tableroJugador.manejar_evento(event, Color.WHITE.value)
-                    caretaker.añadirMemento()
+                    #caretaker.añadirMemento()
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
@@ -266,8 +266,6 @@ class GestorJuego:
                 else:
                     print("No hay más ayudas")
 
-            elif event.key == pygame.K_l:
-                caretaker.cargarPartida()
-
         if event.type == pygame.USEREVENT:
             self.comprobar(event.fila, event.columna, event.color)
+            caretaker.añadirMemento()

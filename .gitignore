@@ -1,5 +1,2 @@
 ./idea
 **/__pycache__/
-src/catalogo/
-src/guardadoPartida/
-src/guardadoPartidaGestorCreacion/
