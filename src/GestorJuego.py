@@ -2,7 +2,7 @@ import pygame
 import math
 
 from pygame import MOUSEBUTTONDOWN
-from colorbutton import colorbutton
+from colorbutton import ColorButton
 from memento import mementoJuego
 from tablero import Tablero
 from Color import Color
@@ -10,23 +10,23 @@ from Proxy import Proxy
 
 # Gama de colorbutton's que se presentan en la pantalla al momento de jugar con un nonograma
 color_buttons = [
-    colorbutton(image_base=pygame.image.load("assets/black.png"), image_flotante = pygame.image.load("assets/black_flotante.png"),pos=(1100, 50), color=Color.BLACK.value, size=(50, 50)),
-    colorbutton(image_base=pygame.image.load("assets/blue.png"), image_flotante = pygame.image.load("assets/blue_flotante.png"),pos=(1160, 50), color=Color.BLUE.value, size=(50, 50)),
-    colorbutton(image_base=pygame.image.load("assets/brown.png"), image_flotante = pygame.image.load("assets/brown_flotante.png"),pos=(1100, 110), color=Color.BROWN.value, size=(50, 50)),
-    colorbutton(image_base=pygame.image.load("assets/celeste.png"), image_flotante = pygame.image.load("assets/celeste_flotante.png"),pos=(1160, 110), color=Color.LIGHT_BLUE.value, size=(50, 50)),
-    colorbutton(image_base=pygame.image.load("assets/green.png"), image_flotante = pygame.image.load("assets/green_flotante.png"),pos=(1100, 170), color=Color.GREEN.value, size=(50, 50)),
-    colorbutton(image_base=pygame.image.load("assets/greenL.png"),image_flotante = pygame.image.load("assets/greenL_flotante.png"), pos=(1160, 170), color=Color.LIGHT_GREEN.value, size=(50, 50)),
-    colorbutton(image_base=pygame.image.load("assets/orange.png"), image_flotante = pygame.image.load("assets/orange_flotante.png"),pos=(1100, 230), color=Color.ORANGE.value, size=(50, 50)),
-    colorbutton(image_base=pygame.image.load("assets/pink.png"), image_flotante = pygame.image.load("assets/pink_flotante.png"),pos=(1160, 230), color=Color.PINK.value, size=(50, 50)),
-    colorbutton(image_base=pygame.image.load("assets/purple.png"), image_flotante = pygame.image.load("assets/purple_flotante.png"),pos=(1100, 290), color=Color.PURPLE.value, size=(50, 50)),
-    colorbutton(image_base=pygame.image.load("assets/red.png"), image_flotante = pygame.image.load("assets/red_flotante.png"),pos=(1160, 290), color=Color.RED.value, size=(50, 50)),
-    colorbutton(image_base=pygame.image.load("assets/yellow.png"), image_flotante = pygame.image.load("assets/yellow_flotante.png"),pos=(1130, 350), color=Color.YELLOW.value, size=(50, 50)),
+    ColorButton(image_base=pygame.image.load("assets/black.png"), image_flotante = pygame.image.load("assets/black_flotante.png"), pos=(1100, 50), color=Color.BLACK.value, size=(50, 50)),
+    ColorButton(image_base=pygame.image.load("assets/blue.png"), image_flotante = pygame.image.load("assets/blue_flotante.png"), pos=(1160, 50), color=Color.BLUE.value, size=(50, 50)),
+    ColorButton(image_base=pygame.image.load("assets/brown.png"), image_flotante = pygame.image.load("assets/brown_flotante.png"), pos=(1100, 110), color=Color.BROWN.value, size=(50, 50)),
+    ColorButton(image_base=pygame.image.load("assets/celeste.png"), image_flotante = pygame.image.load("assets/celeste_flotante.png"), pos=(1160, 110), color=Color.LIGHT_BLUE.value, size=(50, 50)),
+    ColorButton(image_base=pygame.image.load("assets/green.png"), image_flotante = pygame.image.load("assets/green_flotante.png"), pos=(1100, 170), color=Color.GREEN.value, size=(50, 50)),
+    ColorButton(image_base=pygame.image.load("assets/greenL.png"), image_flotante = pygame.image.load("assets/greenL_flotante.png"), pos=(1160, 170), color=Color.LIGHT_GREEN.value, size=(50, 50)),
+    ColorButton(image_base=pygame.image.load("assets/orange.png"), image_flotante = pygame.image.load("assets/orange_flotante.png"), pos=(1100, 230), color=Color.ORANGE.value, size=(50, 50)),
+    ColorButton(image_base=pygame.image.load("assets/pink.png"), image_flotante = pygame.image.load("assets/pink_flotante.png"), pos=(1160, 230), color=Color.PINK.value, size=(50, 50)),
+    ColorButton(image_base=pygame.image.load("assets/purple.png"), image_flotante = pygame.image.load("assets/purple_flotante.png"), pos=(1100, 290), color=Color.PURPLE.value, size=(50, 50)),
+    ColorButton(image_base=pygame.image.load("assets/red.png"), image_flotante = pygame.image.load("assets/red_flotante.png"), pos=(1160, 290), color=Color.RED.value, size=(50, 50)),
+    ColorButton(image_base=pygame.image.load("assets/yellow.png"), image_flotante = pygame.image.load("assets/yellow_flotante.png"), pos=(1130, 350), color=Color.YELLOW.value, size=(50, 50)),
 ]
 
 # Botones de deshacer y rehacer
 n = 80
-DESHACER = colorbutton(image_base=pygame.image.load("assets/deshacer.png"), image_flotante = pygame.image.load("assets/deshacer.png"),pos=(1050, 600), color=None, size=(n, n))
-REHACER = colorbutton(image_base=pygame.image.load("assets/rehacer.png"), image_flotante = pygame.image.load("assets/rehacer.png"),pos=(1150, 600), color=None, size=(n, n))
+DESHACER = ColorButton(image_base=pygame.image.load("assets/deshacer.png"), image_flotante = pygame.image.load("assets/deshacer.png"), pos=(1050, 600), color=None, size=(n, n))
+REHACER = ColorButton(image_base=pygame.image.load("assets/rehacer.png"), image_flotante = pygame.image.load("assets/rehacer.png"), pos=(1150, 600), color=None, size=(n, n))
 
 # Clase que muestra un nonograma almacenado y gestiona las interacciones del jugador con el mismo
 class GestorJuego:

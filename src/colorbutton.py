@@ -1,7 +1,7 @@
 import pygame
 
 # Clase que representa un botón de color
-class colorbutton:
+class ColorButton:
     def __init__(self, image_base, image_flotante, pos, color, size=(50, 50)):
         self.image_base = image_base
         self.image_flotante = image_flotante
