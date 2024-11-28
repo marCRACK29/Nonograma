@@ -78,14 +78,10 @@ def play(tamaño, ruta_nonograma):
     while True:
         PLAY_MOUSE_POS = pygame.mouse.get_pos() # Variable para obtener la posición del mouse
 
-        SCREEN.fill("White")
-
-        PLAY_TEXT = get_font(45).render("Nonograma", True, "White") # Titulo
-        PLAY_RECT = PLAY_TEXT.get_rect(midtop=(640, 100)) # Posicion del titulo
-        SCREEN.blit(PLAY_TEXT, PLAY_RECT) # Dibujar el titulo en la pantalla
+        SCREEN.fill("White") # Fondo de la pantalla
 
         # A continuación los botones para esta ventana
-        PLAY_BACK = Button(image=None, pos=(1100, 460),
+        PLAY_BACK = Button(image=None, pos=(1100, 600),
                            text_input="BACK", font=get_font(75), base_color="Black", color_flotante="Green")
 
         # Cambiar el color del boton si el mouse esta encima
@@ -633,12 +629,12 @@ def main_menu():
         if saved_game_exists:
             CONTINUAR_BUTTON = Button(image=None, pos=(300, 250),
                                       text_input="CONTINUAR", font=get_font(50), base_color="White",
-                                      color_flotante="White")
+                                      color_flotante="Green")
 
         CATALOGO_BUTTON = Button(image=None, pos=(300, 350),
                                  text_input="JUGAR", font=get_font(50), base_color="White", color_flotante="Green")
 
-        ELIMINAR_BUTTON = Button(image=None, pos=(1000, 650),
+        ELIMINAR_BUTTON = Button(image=None, pos=(1000, 400),
                                  text_input="ELIMINAR", font=get_font(50), base_color="White", color_flotante="Red")
 
         CREACION_BUTTON = Button(image=None, pos=(300, 450),

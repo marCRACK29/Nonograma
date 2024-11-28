@@ -25,9 +25,10 @@ color_buttons = [
 
 # Botones de deshacer y rehacer
 n = 80
-DESHACER = ColorButton(image_base=pygame.image.load("assets/deshacer.png"), image_flotante = pygame.image.load("assets/deshacer.png"), pos=(1050, 600), color=None, size=(n, n))
-REHACER = ColorButton(image_base=pygame.image.load("assets/rehacer.png"), image_flotante = pygame.image.load("assets/rehacer.png"), pos=(1150, 600), color=None, size=(n, n))
+DESHACER = ColorButton(image_base=pygame.image.load("assets/deshacer.png"), image_flotante = pygame.image.load("assets/deshacer_flotante.png"), pos=(1050, 460), color=None, size=(n, n))
+REHACER = ColorButton(image_base=pygame.image.load("assets/rehacer.png"), image_flotante = pygame.image.load("assets/rehacer_flotante.png"), pos=(1150, 460), color=None, size=(n, n))
 
+AYUDA = ColorButton(image_base=pygame.image.load("assets/Ampolleta.png"), image_flotante = pygame.image.load("assets/Ampolleta_flotante.png"), pos=(900, 115), color=None, size=(n, n))
 # Clase que muestra un nonograma almacenado y gestiona las interacciones del jugador con el mismo
 class GestorJuego:
     def __init__(self, tamañoTablero):
@@ -164,9 +165,9 @@ class GestorJuego:
     def draw(self, screen):
         for boton in color_buttons:
             boton.draw(screen)
-
         DESHACER.draw(screen)
         REHACER.draw(screen)
+        AYUDA.draw(screen)
 
         tamañoCasilla = self.tamañoCasilla
         desfase_x = 300
@@ -200,9 +201,9 @@ class GestorJuego:
             self.contadorVidas.draw(screen)
 
         # Dibujar la cantidad de ayudas disponibles
-        ayudas_text = f"Ayudas disponibles: {self.ayudas}"
+        ayudas_text = f"= {self.ayudas}"
         ayudas_render = fuente.render(ayudas_text, True, (0, 0, 0))  # Color negro
-        screen.blit(ayudas_render, (900, desfase_y - 50))  # Posición encima del tablero
+        screen.blit(ayudas_render, (950, desfase_y - 50))  # Posición encima del tablero
 
     # Metodo que verifica si el clic se encuentra dentro del tablero
     def es_clic_valido(self, pos) -> bool:
@@ -236,6 +237,14 @@ class GestorJuego:
                     return
                 elif REHACER.checkForInput(event.pos):
                     caretaker.rehacer()
+                    return
+                elif AYUDA.checkForInput(event.pos):
+                    if self.ayudas > 0:
+                        self.ayudas -= 1
+                        self.ayuda()
+                        caretaker.añadirMemento()
+                    else:
+                        print("No hay más ayudas")
                     return
 
                 # Verificar si el clic está dentro del tablero
