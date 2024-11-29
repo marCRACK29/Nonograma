@@ -3,7 +3,7 @@ import pygame_gui
 
 # Clase que permite ingresar texto en una ventana
 class Text_box():
-    def __init__(self,screen,xy=(100,300),wh=(600,50)):
+    def __init__(self,screen,xy=(100,70),wh=(600,50)):
         """
         :param screen : Surface
             La pantalla en la que estará el cuadro de texto.
