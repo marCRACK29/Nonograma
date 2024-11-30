@@ -1,7 +1,7 @@
-Que es un nonograma?</title>
+¿Qué es un nonograma?</title>
 Un nonograma, también conocido como
 Hanjie, Picross o Griddlers, es un 
-puzzle logico en el rellenas celdas 
+puzzle lógico en el que rellenas celdas
 para revelar una imagen oculta.
 
      2     3           2     3
@@ -13,13 +13,13 @@ para revelar una imagen oculta.
   1 |  |  |  |      1 |  |  |@@|
     +--+--+--+        +--+--+--+ 
 </page>
-Reglas basicas</title>
-Cada fila y columna tiene numeros a
+Reglas básicas</title>
+Cada fila y columna tiene números a
 los lados que te dan pistas acerca
-de como rellenar las celdas. Cada
-numero representa una seccion
+de cómo rellenar las celdas. Cada
+número representa una sección
 de celdas consecutivas del mismo
-color. EL valor del numero te
+color. El valor del número te
 dice cuantas celdas consecutivas
 hay.
 </page>
@@ -52,7 +52,7 @@ ser contiguas.
 </page>
 El orden importa</title>
 El orden en el que aparecen los
-numeros te dice el orden en el
+números te dice el orden en el
 que van a estar las secciones.
 
             Si tuvieras
@@ -64,27 +64,27 @@ que van a estar las secciones.
       3 1 |@@|@@|@@|  |@@|
           +--+--+--+--+--+
           
-           No seria esto!:
+          ¡No sería esto!:
           +--+--+--+--+--+
       3 1 |@@|  |@@|@@|@@|
           +--+--+--+--+--+
 </page>
-Solucion unica</title>
-Cada Nonograma tiene una solucion
-unica. Esto significa que para cada
-tablero, solo existe una unica
+Solución única</title>
+Cada Nonograma tiene una solución
+única. Esto significa que para cada
+tablero, solo existe una única
 manera de rellenar las casillas
 tal que se satisfagan todas las pistas
 
 </page>
 Vidas</title>
 Para evitar situaciones en las que
-te das cuenta que cometiste un
-error despues de avanzar harto
+te das cuenta de que cometiste un
+error después de avanzar bastante
 una partida, el momento en el
 que cometas un error, el juego te
-avisara. Pero tambien perderas una
-vida. Si te quedas sin vidas tendras
+avisará. Pero también perderás una
+vida. Si te quedas sin vidas, tendrás
 que volver a empezar, asi que solo
 rellena una casilla si tienes certeza!
 
