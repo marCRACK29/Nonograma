@@ -15,7 +15,8 @@ orden en que aparecen.
 
 
 <h3>Instrucciones de uso:</h3>
-Una vez dentro del directorio raíz, diríjase a la carpeta `src` en donde encontrará el archivo `main.py`. Abra dicho archivo y ejecute el programa en su IDE o editor.
+Una vez dentro del directorio raíz, diríjase a la carpeta <code>src</code> en 
+donde encontrará el archivo <code>main.py</code>. Abra dicho archivo y ejecute el programa en su IDE o editor.
 <h3 align="left">Herramientas utilizadas: </h3>
 <p> 
   <a href="https://www.pygame.org/docs/" target="_blank" rel="noreferrer">
