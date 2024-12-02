@@ -1,6 +1,6 @@
 import pygame
 import math
-
+from math import ceil
 from pygame import MOUSEBUTTONDOWN
 from colorbutton import ColorButton
 from memento import mementoJuego
@@ -88,7 +88,7 @@ class GestorJuego:
             self.tableroObjetivo = tablero_cargado
         self.pistasColumnas()
         self.pistasFilas()
-        self.setearAyudas(3)
+        self.setearAyudas(ceil(self.tamañoTablero / 2))
 
     # Metodo que pinta una casilla correcta para ayudar al jugador
     def ayuda(self):
