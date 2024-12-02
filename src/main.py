@@ -634,7 +634,7 @@ def main_menu():
                                  text_input="ELIMINAR", font=get_font(50), base_color="White", color_flotante="Red")
 
         CREACION_BUTTON = Button(image=None, pos=(300, 450),
-                                 text_input="CREACION", font=get_font(50), base_color="White", color_flotante="Green")
+                                 text_input="CREACIÓN", font=get_font(50), base_color="White", color_flotante="Green")
 
         TUTORIAL_BUTTON = Button(image=None, pos=(300, 550),
                                  text_input="TUTORIAL", font=get_font(50), base_color="White", color_flotante="Green")
