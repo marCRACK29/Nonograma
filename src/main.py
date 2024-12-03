@@ -301,7 +301,7 @@ def catalogo():
 
         SCREEN.fill("black")
 
-        CATALOGO_TEXT = get_font(45).render("Catalogo", True, "White")
+        CATALOGO_TEXT = get_font(45).render("Catálogo", True, "White")
         CATALOGO_RECT = CATALOGO_TEXT.get_rect(center=(640, 100))
         SCREEN.blit(CATALOGO_TEXT, CATALOGO_RECT)
 
